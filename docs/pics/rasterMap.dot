@@ -1,0 +1,32 @@
+
+digraph world {
+  node[shape=ellipse];
+  app[label="тестирующее приложение\n tApp"];
+  args[label="обработка аргументов\n args"];
+  log[label="журналирование\n Logger"];
+  elGeo[label="вычисления на эллипсе\n elGeo"];
+  form[label="главное окно приложения\n FormToShow"];
+  map[label="основная функциональность\n MapToShow"];
+  tile[label="загрузка тайлов\n MBTile"];
+  node[shape=box];
+  db[label="БД для кешированич, MBTiles.db"];
+  fl[label="треки и изображения"];
+  app -> elGeo;
+  app -> form;
+  app -> map;
+  app -> args;
+  app -> log;
+  elGeo -> log;
+  
+  form -> args;
+
+  map -> tile;
+  map -> elGeo ->fl ;
+
+  map ->  log;
+  tile ->  db;
+  tile ->  log;
+
+
+
+}

@@ -1,0 +1,2642 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta content='width=1024' name='viewport'>
+
+    
+
+    <title>OpenStreetMap как источник геоданных / Хабрахабр</title>
+
+      <meta name="description" content="В работе программиста иногда возникает потребность в геоданных. Для этого можно использовать OpenStreetMap (OSM). Привлекательность OSM — в возможности совершенно легально использовать качественную..." />
+
+      <meta name="keywords" content="openstreetmap, osm, геоданные, geojson" />
+
+      <meta property="fb:app_id"      content="444736788986613" /> 
+<meta property="og:type"        content="article" /> 
+<meta property="og:url"         content="https://habrahabr.ru/post/270513/" /> 
+<meta property="og:title"       content="OpenStreetMap как источник геоданных" />
+	<meta property="og:image"       content="https://habrastorage.org/files/119/adc/7c5/119adc7c55b645348818e377683d8cd1.PNG" />
+	<link rel="image_src" href="https://habrastorage.org/files/119/adc/7c5/119adc7c55b645348818e377683d8cd1.PNG" /><meta property="og:image"       content="https://habrastorage.org/files/902/8c2/e7e/9028c2e7eb5343f69d50dc9013b5ceda.PNG" />
+	<link rel="image_src" href="https://habrastorage.org/files/902/8c2/e7e/9028c2e7eb5343f69d50dc9013b5ceda.PNG" />
+	
+<meta property="og:description" content="В работе программиста иногда возникает потребность в геоданных. Для этого можно использовать OpenStreetMap (OSM). Привлекательность OSM &mdash; в возможности..." />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@habrahabr" />
+  <meta property="al:android:url" content="habrahabr://post/270513" />
+<meta property="al:android:app_name" content="Habrahabr" />
+<meta property="al:android:package" content="ru.habrahabr" />
+<meta property="al:windows_phone:url" content="habrahabr://post/270513" />
+<meta property="al:windows_phone:app_name" content="Habrahabr" />
+<meta property="al:windows_phone:app_id" content="460a6bd6-8955-470f-935e-9ea1726a6060" />
+  <link rel="canonical" href="https://habrahabr.ru/post/270513/"/>
+  <link rel="alternate" media="only screen and (max-width: 640px)" href="https://m.habrahabr.ru/post/270513/" >
+
+
+    <meta name='yandex-verification' content='71593b225aeafc4e' />
+    <meta name='referrer' content='unsafe-url' />
+    <meta name="pocket-site-verification" content="ed24b2b9721edf0a282c5b4a3232c4" />
+
+    <style type="text/css">
+      @font-face{font-family:'Fira Sans';font-style:normal;font-display:swap;font-weight:500;src:url(/fonts/0/FiraSans/FiraSans-Medium.eot);src:local('Fira Sans Medium'),local(FiraSans-Medium),url(/fonts/0/FiraSans/FiraSans-Medium.eot?#iefix) format("embedded-opentype"),url(/fonts/0/FiraSans/FiraSans-Medium.woff2) format("woff2"),url(/fonts/0/FiraSans/FiraSans-Medium.woff) format("woff"),url(/fonts/0/FiraSans/FiraSans-Medium.ttf) format("truetype")}
+    </style>
+
+      <link href="//habracdn.net/habr/styles/1468852450/_build/post_common_css.css" rel="stylesheet" media="all" />
+  <link href="//habracdn.net/habr/styles/1468852450/users/all.css" rel="stylesheet" media="all" />
+
+    <link href="//habracdn.net/habr/styles/1468852450/_build/global_main.css" rel="stylesheet" media="all" />
+
+    <script>
+      (function(){'use strict';var f,g=[];function l(a){g.push(a);1==g.length&&f()}function m(){for(;g.length;)g[0](),g.shift()}f=function(){setTimeout(m)};function n(a){this.a=p;this.b=void 0;this.f=[];var b=this;try{a(function(a){q(b,a)},function(a){r(b,a)})}catch(c){r(b,c)}}var p=2;function t(a){return new n(function(b,c){c(a)})}function u(a){return new n(function(b){b(a)})}function q(a,b){if(a.a==p){if(b==a)throw new TypeError;var c=!1;try{var d=b&&b.then;if(null!=b&&"object"==typeof b&&"function"==typeof d){d.call(b,function(b){c||q(a,b);c=!0},function(b){c||r(a,b);c=!0});return}}catch(e){c||r(a,e);return}a.a=0;a.b=b;v(a)}}
+      function r(a,b){if(a.a==p){if(b==a)throw new TypeError;a.a=1;a.b=b;v(a)}}function v(a){l(function(){if(a.a!=p)for(;a.f.length;){var b=a.f.shift(),c=b[0],d=b[1],e=b[2],b=b[3];try{0==a.a?"function"==typeof c?e(c.call(void 0,a.b)):e(a.b):1==a.a&&("function"==typeof d?e(d.call(void 0,a.b)):b(a.b))}catch(h){b(h)}}})}n.prototype.g=function(a){return this.c(void 0,a)};n.prototype.c=function(a,b){var c=this;return new n(function(d,e){c.f.push([a,b,d,e]);v(c)})};
+      function w(a){return new n(function(b,c){function d(c){return function(d){h[c]=d;e+=1;e==a.length&&b(h)}}var e=0,h=[];0==a.length&&b(h);for(var k=0;k<a.length;k+=1)u(a[k]).c(d(k),c)})}function x(a){return new n(function(b,c){for(var d=0;d<a.length;d+=1)u(a[d]).c(b,c)})};window.Promise||(window.Promise=n,window.Promise.resolve=u,window.Promise.reject=t,window.Promise.race=x,window.Promise.all=w,window.Promise.prototype.then=n.prototype.c,window.Promise.prototype["catch"]=n.prototype.g);}());
+
+      (function(){var k=!!document.addEventListener;function l(a,b){k?a.addEventListener("scroll",b,!1):a.attachEvent("scroll",b)}function v(a){document.body?a():k?document.addEventListener("DOMContentLoaded",a):document.attachEvent("onreadystatechange",function(){"interactive"!=document.readyState&&"complete"!=document.readyState||a()})};function w(a){this.a=document.createElement("div");this.a.setAttribute("aria-hidden","true");this.a.appendChild(document.createTextNode(a));this.b=document.createElement("span");this.c=document.createElement("span");this.h=document.createElement("span");this.f=document.createElement("span");this.g=-1;this.b.style.cssText="max-width:none;display:inline-block;position:absolute;height:100%;width:100%;overflow:scroll;font-size:16px;";this.c.style.cssText="max-width:none;display:inline-block;position:absolute;height:100%;width:100%;overflow:scroll;font-size:16px;";
+      this.f.style.cssText="max-width:none;display:inline-block;position:absolute;height:100%;width:100%;overflow:scroll;font-size:16px;";this.h.style.cssText="display:inline-block;width:200%;height:200%;font-size:16px;max-width:none;";this.b.appendChild(this.h);this.c.appendChild(this.f);this.a.appendChild(this.b);this.a.appendChild(this.c)}
+      function y(a,b){a.a.style.cssText="max-width:none;min-width:20px;min-height:20px;display:inline-block;overflow:hidden;position:absolute;width:auto;margin:0;padding:0;top:-999px;left:-999px;white-space:nowrap;font:"+b+";"}function z(a){var b=a.a.offsetWidth,c=b+100;a.f.style.width=c+"px";a.c.scrollLeft=c;a.b.scrollLeft=a.b.scrollWidth+100;return a.g!==b?(a.g=b,!0):!1}function A(a,b){function c(){var a=m;z(a)&&null!==a.a.parentNode&&b(a.g)}var m=a;l(a.b,c);l(a.c,c);z(a)};function B(a,b){var c=b||{};this.family=a;this.style=c.style||"normal";this.weight=c.weight||"normal";this.stretch=c.stretch||"normal"}var C=null,D=null,H=!!window.FontFace;function I(){if(null===D){var a=document.createElement("div");try{a.style.font="condensed 100px sans-serif"}catch(b){}D=""!==a.style.font}return D}function J(a,b){return[a.style,a.weight,I()?a.stretch:"","100px",b].join(" ")}
+      B.prototype.load=function(a,b){var c=this,m=a||"BESbswy",x=b||3E3,E=(new Date).getTime();return new Promise(function(a,b){if(H){var K=new Promise(function(a,b){function e(){(new Date).getTime()-E>=x?b():document.fonts.load(J(c,c.family),m).then(function(c){1<=c.length?a():setTimeout(e,25)},function(){b()})}e()}),L=new Promise(function(a,c){setTimeout(c,x)});Promise.race([L,K]).then(function(){a(c)},function(){b(c)})}else v(function(){function q(){var b;if(b=-1!=f&&-1!=g||-1!=f&&-1!=h||-1!=g&&-1!=
+      h)(b=f!=g&&f!=h&&g!=h)||(null===C&&(b=/AppleWebKit\/([0-9]+)(?:\.([0-9]+))/.exec(window.navigator.userAgent),C=!!b&&(536>parseInt(b[1],10)||536===parseInt(b[1],10)&&11>=parseInt(b[2],10))),b=C&&(f==r&&g==r&&h==r||f==t&&g==t&&h==t||f==u&&g==u&&h==u)),b=!b;b&&(null!==d.parentNode&&d.parentNode.removeChild(d),clearTimeout(G),a(c))}function F(){if((new Date).getTime()-E>=x)null!==d.parentNode&&d.parentNode.removeChild(d),b(c);else{var a=document.hidden;if(!0===a||void 0===a)f=e.a.offsetWidth,g=n.a.offsetWidth,
+      h=p.a.offsetWidth,q();G=setTimeout(F,50)}}var e=new w(m),n=new w(m),p=new w(m),f=-1,g=-1,h=-1,r=-1,t=-1,u=-1,d=document.createElement("div"),G=0;d.dir="ltr";y(e,J(c,"sans-serif"));y(n,J(c,"serif"));y(p,J(c,"monospace"));d.appendChild(e.a);d.appendChild(n.a);d.appendChild(p.a);document.body.appendChild(d);r=e.a.offsetWidth;t=n.a.offsetWidth;u=p.a.offsetWidth;F();A(e,function(a){f=a;q()});y(e,J(c,'"'+c.family+'",sans-serif'));A(n,function(a){g=a;q()});y(n,J(c,'"'+c.family+'",serif'));A(p,function(a){h=
+      a;q()});y(p,J(c,'"'+c.family+'",monospace'))})})};window.FontFaceObserver=B;window.FontFaceObserver.prototype.check=window.FontFaceObserver.prototype.load=B.prototype.load;"undefined"!==typeof module&&(module.exports=window.FontFaceObserver);}());
+
+      (function( w ){
+        // if the class is already set, we're good.
+        if( w.document.documentElement.className.indexOf( "fonts-loaded" ) > -1 ){ return; }
+
+        var html = document.documentElement;
+        var font = new w.FontFaceObserver("Fira Sans", { weight: 500 });
+
+        font.load().then(function () {
+          html.classList.add('fonts-loaded');
+          sessionStorage.fontsLoaded = true;
+        }).catch(function () {
+          sessionStorage.fontsLoaded = false;
+        });
+
+        if (sessionStorage.fontsLoaded) {
+          html.classList.add('fonts-loaded');
+        }
+      }(this));
+    </script>
+
+    <script type="text/javascript" src="//habracdn.net/habr/javascripts/1468852450/libs/adfox.asyn.code.ver3.js"></script>
+    <script type="text/javascript" src="//habracdn.net/habr/javascripts/1468852450/assets/global_main.js"></script>
+      <script type="text/javascript" src="//habracdn.net/habr/javascripts/1468852450/assets/post_common_js.js"></script>
+  <script type="text/javascript" src="//habracdn.net/habr/javascripts/1468852450/users/all.js"></script>
+
+
+    
+    
+
+    <meta name='yandex-verification' content='67d46b975fa41645' />
+    
+    <meta content='Хабрахабр' name='apple-mobile-web-app-title'>
+
+<link rel="apple-touch-icon-precomposed" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png" />
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png" />
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png" />
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png" />
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png" />
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png" />
+<link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16" />
+<meta name="application-name" content="Хабрахабр"/>
+<meta name="msapplication-TileColor" content="#FFFFFF" />
+<meta name="msapplication-TileImage" content="mstile-144x144.png" />
+
+      
+      <script >
+        var N = 5;
+        var ar_duo1 = Math.floor(Math.random()*N+1);
+      </script>
+      <script type="text/javascript" src="//habracdn.net/habr/javascripts/1468852450/adriver.js"></script>
+
+    <link title="Хабрахабр / Комментарии к публикации «OpenStreetMap как источник геоданных»" type="application/rss+xml" rel="alternate" href="https://habrahabr.ru/rss/post/270513/"/>
+
+    <script src="//habracdn.net/habr/javascripts/1468852450/_parts/advertising.js"></script>
+
+<script type="text/javascript">
+
+  if (typeof adriver == 'undefined')
+  {
+    var adb1 = 'yes';
+  }
+
+    var user_type = 'guest';
+
+  var page_type = "publish_ugc";
+
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-726094-1',  'auto');
+  ga('create', 'UA-726094-24', 'auto', {'name': 'HGM'});
+
+  ga('require', 'displayfeatures');
+  ga('set', 'dimension1', user_type); // user type - guest/readonly/habrauser
+
+
+  ga('set', 'dimension4', adb1);
+
+  ga('set', 'dimension5', page_type);
+
+
+  if(typeof removeUtms === 'undefined') {
+    removeUtms = function(){};
+  }
+
+  ga('HGM.set', 'dimension1', user_type);
+  ga('HGM.set', 'dimension2', "habrahabr");
+  ga('HGM.send', 'pageview');
+
+  ga('send', 'pageview', { 'hitCallback': removeUtms });
+
+
+</script>
+
+
+    <script>
+  var adcm_config ={
+    id:1034,
+    platformId: 34,
+    
+    tags: ['hub_openstreetmap', 'g_open_source'],
+    init: function () {
+      window.adcm.call();
+    }
+  };
+</script>
+<script src="https://tag.digitaltarget.ru/adcm.js" async></script>
+  </head>
+
+  <body>
+    <div class="layout_inner">
+      <div id="TMpanel">
+  <div class="container">
+    <div class="bmenu">
+      <a href="https://tmfeed.ru?utm_source=tm_habrahabr&utm_medium=tm_top_panel&utm_campaign=tm_promo">TM Feed</a>
+      <a href="https://habrahabr.ru?utm_source=tm_habrahabr&utm_medium=tm_top_panel&utm_campaign=tm_promo" class="current">Хабрахабр</a>
+      <a href="https://geektimes.ru?utm_source=tm_habrahabr&utm_medium=tm_top_panel&utm_campaign=tm_promo">Geektimes</a>
+      <a href="https://toster.ru?utm_source=tm_habrahabr&utm_medium=tm_top_panel&utm_campaign=tm_promo">Тостер</a>
+      <a href="https://moikrug.ru?utm_source=tm_habrahabr&utm_medium=tm_top_panel&utm_campaign=tm_promo">Мой круг</a>
+      <a href="https://freelansim.ru?utm_source=habrahabr&utm_medium=referral&utm_campaign=mainpage&utm_content=head_link">Фрилансим</a>
+    </div>
+      <div class="bmenu_inner" style="display:inline-block!important;visibility:visible!important;">
+        <span class="bmenu__label">Спецпроекты:</span>
+        <span class="bmenu slink"></span>
+        <span id="adriver_banner_465568687"></span>
+      </div>
+  </div>
+</div>
+
+      <div id="layout">
+        <div id="navbar_overlay" class="hidden"></div>
+<div id="navbar">
+    <div class="nav_panel">
+        <a href="/" class="logo"></a>
+
+            <a href="/posts/" class="tab tab_menu" data-tab="menu_tab" title="Меню"><span class="g-icon g-icon-burger"></span></a>
+            <a href="https://habrahabr.ru/auth/login/" class="tab tab_login" id="login" title="Войти"><span class="g-icon g-icon-lock"></span></a>
+
+        <a href="#" class="scroll_to_up hidden scroll_to_up_for_guest" id="scroll_to_top" title="Наверх"></a>
+    </div>
+
+    <div class="nav_tabs_content ">
+        <div class="nav_tab hidden" id="menu_tab">
+          <div class="title">Разделы</div>
+          <form action="/search/#n" method="get" class="global_search_form">
+            <div>
+              <input type="text" name="q" placeholder="Поиск" />
+            </div>
+          </form>
+          <div class="menu">
+              <a href="/posts/top/">Публикации</a>
+              <a href="/hubs/">Хабы</a>
+              <a href="/companies/">Компании</a>
+              <a href="/users/">Пользователи</a>
+              <a href="/sandbox/">Песочница</a>
+              <div class="line"></div>
+              <a href="https://toster.ru/?" class="new_window">Q&A</a>
+              <a href="https://moikrug.ru?utm_source=tm_habrahabr&utm_medium=tm_left_menu&utm_campaign=tm_promo" class="new_window">Вакансии</a>
+          </div>
+
+            
+                <div class="line"></div>
+                <div class="title">Спецпроекты</div>
+                <div class="menu">
+              <a href="http://bit.ly/27YDyuf" target="_blank">Device Lab от Google</a>
+              
+              <a href="http://bit.ly/29mQ14a" target="_blank">Малина для Админа</a>
+              </div>
+        </div>
+
+
+    </div>
+</div>
+
+        <div class="inner">
+
+          
+            <div class="profile-header js-user_995384">
+
+  <div class="profile-header__summary author-info author-info_profile ">
+    <a href="/users/apelserg/" class="author-info__image" onclick="if (typeof ga === 'function') { ga('send', 'event', 'author_info_top', 'profile', 'apelserg');}">
+        <span class="user-pic_default user-pic_default_47 user-pic_blue"></span>
+
+    </a>
+
+    <div class="author-info__desc">
+      <div class="author-info__username">
+         <a href="/users/apelserg/" class="author-info__name" onclick="if (typeof ga === 'function') { ga('send', 'event', 'author_info_top', 'profile', 'apelserg');}">Сергей</a> 
+        <a href="/users/apelserg/" class="author-info__nickname" onclick="if (typeof ga === 'function') { ga('send', 'event', 'author_info_top', 'profile', 'apelserg');}">@apelserg</a>
+        
+      </div>
+        <div class="author-info__specialization">
+          Пользователь
+        </div>
+    </div>
+  </div>
+
+    <div class="profile-header__stats">
+
+      <div class="karma__widjet voting-wjt voting-wjt_user-profile js-karma  ">
+
+        <div class="voting-wjt__counter js-karma-mark voting-wjt__counter_positive " title="36 голосов">
+          <div class="voting-wjt__counter-score js-karma_num">2,0</div>
+          <div class="voting-wjt__label">карма</div>
+        </div>
+
+      </div>
+
+      <div class="statistic statistic_user-rating" title="Рейтинг пользователя">
+        <div class="statistic__value statistic__value_magenta">0,0</div>
+        <div class="statistic__label">рейтинг</div>
+      </div>
+
+    </div>
+
+
+</div>
+
+  <div class="content_wrapper column-wrapper_content">
+    <div class="column-wrapper js-sticky-wrapper">
+      <div class="content_left js-content_left">
+          <div class="tabs">
+    <ul class="tabs-menu tabs-menu_habrahabr">
+          <li class="tabs-menu__item tabs-menu__item_user-profile tabs-menu__item_inline">
+            <a href="https://habrahabr.ru/users/apelserg/" class="tab-item tab-item_stacked "  >
+              <span class="tab-item__value stats">
+                <span class="stats__counters stats__counters_big">
+                  <strong class="counter"></strong>
+                </span>
+                <span class="stats__value">Профиль</span>
+            </a>
+          </li>
+          <li class="tabs-menu__item tabs-menu__item_user-profile tabs-menu__item_inline">
+            <a href="https://habrahabr.ru/users/apelserg/topics/" class="tab-item tab-item_stacked tab-item_current"  >
+              <span class="tab-item__value stats">
+                <span class="stats__counters stats__counters_big">
+                  <strong class="counter">6</strong>
+                </span>
+                <span class="stats__value">Публикации</span>
+            </a>
+          </li>
+          <li class="tabs-menu__item tabs-menu__item_user-profile tabs-menu__item_inline">
+            <a href="https://habrahabr.ru/users/apelserg/comments/" class="tab-item tab-item_stacked "  >
+              <span class="tab-item__value stats">
+                <span class="stats__counters stats__counters_big">
+                  <strong class="counter">78</strong>
+                </span>
+                <span class="stats__value">Комментарии</span>
+            </a>
+          </li>
+          <li class="tabs-menu__item tabs-menu__item_user-profile tabs-menu__item_inline">
+            <a href="https://habrahabr.ru/users/apelserg/favorites/" class="tab-item tab-item_stacked "  >
+              <span class="tab-item__value stats">
+                <span class="stats__counters stats__counters_big">
+                  <strong class="counter">0</strong>
+                </span>
+                <span class="stats__value">Избранное</span>
+            </a>
+          </li>
+          <li class="tabs-menu__item tabs-menu__item_user-profile tabs-menu__item_inline">
+            <a href="https://habrahabr.ru/users/apelserg/subscription/followers/" class="tab-item tab-item_stacked "  >
+              <span class="tab-item__value stats">
+                <span class="stats__counters stats__counters_big">
+                  <strong class="counter">1</strong>
+                </span>
+                <span class="stats__value">Подписчики</span>
+            </a>
+          </li>
+    </ul>
+
+  </div>
+
+
+        <div class="post_show">
+          
+    <div class="post post_full" id="post_270513">
+  <div class="post__header">
+    <span class="post__time_published">17 ноября 2015 в 16:53</span>
+
+    <h1 class="post__title">
+      <a href="https://habrahabr.ru/flows/develop/" class="post__flow" onclick="if (typeof ga === 'function') { ga('send', 'event', 'flow', 'post page', 'Разработка'); }">Разработка</a><span class="post__title-arrow">&nbsp;&rarr;</span>
+      <span>OpenStreetMap как источник геоданных</span>
+      
+
+
+
+
+
+
+
+
+    </h1>
+
+      <div class="hubs">
+          <a href="https://habrahabr.ru/hub/openstreetmap/" class="hub " title="Вы не подписаны на этот хаб" onclick="if (typeof ga === 'function') { ga('send', 'event', 'hub', 'post page', 'OpenStreetMap'); }">OpenStreetMap</a><span class="profiled_hub" title="Профильный хаб">*</span>
+      </div>
+  </div>
+
+  <div class="post__body post__body_full">
+    <div class="content html_format">В работе программиста иногда возникает потребность в геоданных. Для этого можно использовать OpenStreetMap (OSM). Привлекательность OSM — в возможности совершенно легально использовать качественную картографическую информацию.<br/>
+<br/>
+Цель публикации — разобрать на рабочих примерах процесс извлечения геоданных OSM. В результате будет получен программный код (на C#), который можно собрать в Visual или Xamarin Studio, выполнить его на разных ОС (под Mono) и получить результат в форматах CSV и geoJSON. Ограничений на размер обрабатываемых OSM-данных нет (от минимального до полного). Публикация рассчитана на разработчиков ПО, без опыта работы с OSM.<br/>
+<a name="habracut"></a><br/>
+<h4>Введение</h4><br/>
+Как самостоятельно получить ответ на вроде бы простые и понятные вопросы (просто так, для интереса):<br/>
+ — сколько на Земле государств, каково их население?<br/>
+ — где расположены на Земле города с населением, например, более миллиона человек?<br/>
+ — сколько на Земле вулканов?<br/>
+<br/>
+Или (легко получить на основе примеров):<br/>
+ — где расположены больницы, гостиницы в вашем/чужом городе? А между городами?<br/>
+ — где расположены заправки, зоопарки, музеи, рестораны? Да всё что угодно.<br/>
+<br/>
+Задачу, в общем виде, можно сформулировать примерно так — найти нужные объекты, определить их точное расположение (широту, долготу), название и другую доступную информацию.<br/>
+<br/>
+Далее эти объекты можно отобразить, например, на карте (OSM, Google, Yandex). В публикации, для визуализации результатов, используется (<a href="http://habrahabr.ru/post/183288/">автоматическое отображение на GitHub данных в формате geoJSON</a>).<br/>
+<br/>
+<h4>Базовые понятия и терминология</h4><br/>
+<h5>Точка (node)</h5><br/>
+<a href="http://wiki.openstreetmap.org/wiki/RU:%D0%AD%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D1%8B_%D0%BA%D0%B0%D1%80%D1%82%D1%8B">Базовым элементом</a> структуры данных OSM является точка (node) с географическими координатами — широтой (latitude) и долготой (longitude). Высота точки над уровнем моря, в настоящее время, не указывается.<br/>
+<br/>
+Точка может быть самостоятельным объектом (светофор, киоск, родник) и, без ограничений, входить в состав других объектов (линий и отношений). Точками могут помечаться и большие объекты — страны, города и даже континенты с набором соответствующих тегов.<br/>
+<br/>
+<div class="spoiler"><b class="spoiler_title">Примеры точек без тегов и с тегами (XML):</b><div class="spoiler_text"><pre><code class="xml">&lt;node id=&quot;231477&quot; lat=&quot;52.2600355&quot; lon=&quot;0.0172928&quot; version=&quot;2&quot; timestamp=&quot;2011-02-27T02:33:27Z&quot; changeset=&quot;7406582&quot; uid=&quot;39894&quot; user=&quot;markpeers&quot;/&gt;
+
+&lt;node id=&quot;231478&quot; lat=&quot;52.2552032&quot; lon=&quot;0.0281442&quot; version=&quot;4&quot; timestamp=&quot;2011-02-27T02:33:25Z&quot; changeset=&quot;7406582&quot; uid=&quot;39894&quot; user=&quot;markpeers&quot;&gt;
+  &lt;tag k=&quot;exit_to&quot; v=&quot;Bar Hill B1050; Longstanton&quot;/&gt;
+  &lt;tag k=&quot;fixme&quot; v=&quot;What is with all the layer=3s around this junction?&quot;/&gt;
+  &lt;tag k=&quot;highway&quot; v=&quot;motorway_junction&quot;/&gt;
+  &lt;tag k=&quot;layer&quot; v=&quot;3&quot;/&gt;
+  &lt;tag k=&quot;name&quot; v=&quot;Bar Hill&quot;/&gt;
+  &lt;tag k=&quot;ref&quot; v=&quot;29&quot;/&gt;
+&lt;/node&gt;
+</code></pre><br/>
+Атрибуты node:<br/>
+ — id — уникальный идентификатор в базе OSM (используется для way и relation);<br/>
+ — lat — широта, lon — долгота;<br/>
+ — uid и user — идентификатор и имя оператора, внёсшего изменения (используется для way и relation);<br/>
+ — version — версия изменения (используется для way и relation);<br/>
+ — timestamp — время изменения (используется для way и relation);<br/>
+ — changeset — номер изменения (что-то типа транзакции, которую можно применить или отменить) (используется для way и relation).<br/>
+<br/>
+Теги:<br/>
+ — k=«highway» v=«motorway_junction» — <a href="http://wiki.openstreetmap.org/wiki/RU:Tag:highway%3Dmotorway_junction">указывает на начало съезда с дороги</a>;<br/>
+ — k=«ref» v=«29» — номер съезда;<br/>
+ — k=«name» v=«Bar Hill» — название;<br/>
+ — k=«exit_to» v=«Bar Hill B1050; Longstanton» — куда;<br/>
+ — k=«layer» v=«3» — уровень;<br/>
+ — k=«fixme» v=«What is with all the layer=3s around this junction?» — автор сделал «узелок на память».<br/>
+</div></div><br/>
+Количество точек в OSM, в настоящее время приближается к значению, которое превышает возможности 32-битного хранения. Поэтому OSM перешёл на 64 бита (для контроля количества точек в OSM даже сделан <a href="http://textual.ru/64/">on-line монитор</a>).<br/>
+<br/>
+<h5>Линия (way)</h5><br/>
+Линия — это последовательности точек. Менять последовательность нельзя. Несколько линий, логически, могут представлять один объект. Например, длинная дорога состоит из нескольких линий. Линии одной дороги связаны в единое целое соблюдением условия — точка окончания одной линии строго соответствует точке начала другой линии или нескольких линий (в случае ветвления дороги или съезда на другую дорогу). Такая целостность по точкам для линий в OSM хорошо соблюдается.<br/>
+<br/>
+Полигон — это замкнутая линия, у которой совпадают первая и последняя точки. Полигон не является самостоятельным элементом OSM. Для больших полигонов (границы государств, береговые линии), которые состоят из набора незамкнутых линий, определены правила. Например, при определении береговых линий, земля будет слева по ходу движения, вода — справа. Для административных границ явно указывается — кто слева по ходу движения, кто справа.<br/>
+<br/>
+<div class="spoiler"><b class="spoiler_title">Пример линии (XML):</b><div class="spoiler_text"><pre><code class="xml">&lt;way id=&quot;9933583&quot; version=&quot;18&quot; timestamp=&quot;2013-01-06T20:59:43Z&quot; changeset=&quot;14555667&quot; uid=&quot;30525&quot; user=&quot;The Maarssen Mapper&quot;&gt;
+  &lt;nd ref=&quot;2098832234&quot;/&gt;
+  &lt;nd ref=&quot;81448050&quot;/&gt;
+  &lt;nd ref=&quot;1263117830&quot;/&gt;
+  &lt;nd ref=&quot;1263117982&quot;/&gt;
+  &lt;nd ref=&quot;81448052&quot;/&gt;
+  &lt;nd ref=&quot;81448053&quot;/&gt;
+  &lt;nd ref=&quot;81448054&quot;/&gt;
+  &lt;nd ref=&quot;1297466013&quot;/&gt;
+  &lt;nd ref=&quot;81448063&quot;/&gt;
+  &lt;tag k=&quot;admin_level&quot; v=&quot;6&quot;/&gt;
+  &lt;tag k=&quot;boundary&quot; v=&quot;administrative&quot;/&gt;
+  &lt;tag k=&quot;left:county&quot; v=&quot;Cambridgeshire&quot;/&gt;
+  &lt;tag k=&quot;right:county&quot; v=&quot;Essex&quot;/&gt;
+  &lt;tag k=&quot;source&quot; v=&quot;OS_OpenData_Boundary-Line&quot;/&gt;
+&lt;/way&gt;
+</code></pre><br/>
+Атрибут ref — указывает на id точки (для получения значения координат lat, lon). Важно учитывать последовательность элементов nd.<br/>
+<br/>
+Теги:<br/>
+ — k=«boundary» v=«administrative» — <a href="http://wiki.openstreetmap.org/wiki/RU:Tag:boundary%3Dadministrative">административная граница</a>;<br/>
+ — k=«admin_level» v=«6» — уровень 6;<br/>
+ — k=«left:county» v=«Cambridgeshire» — кто слева;<br/>
+ — k=«right:county» v=«Essex» — кто справа;<br/>
+ — k=«source» v=«OS_OpenData_Boundary-Line» — ссылка на первоисточник информации.<br/>
+</div></div><br/>
+<h5>Отношение (relation)</h5><br/>
+Отношение — это логическое объединение точек, линий и других отношений в единый объект.<br/>
+<br/>
+<div class="spoiler"><b class="spoiler_title">Пример отношения (XML):</b><div class="spoiler_text"><pre><code class="xml">&lt;relation id=&quot;2839278&quot; version=&quot;1&quot; timestamp=&quot;2013-03-25T13:56:31Z&quot; changeset=&quot;15491865&quot; uid=&quot;322785&quot; user=&quot;BCNorwich&quot;&gt;
+  &lt;member type=&quot;way&quot; ref=&quot;74424273&quot; role=&quot;outer&quot;/&gt;
+  &lt;member type=&quot;way&quot; ref=&quot;4950089&quot; role=&quot;inner&quot;/&gt;
+  &lt;member type=&quot;way&quot; ref=&quot;212392511&quot; role=&quot;inner&quot;/&gt;
+  &lt;member type=&quot;way&quot; ref=&quot;212392522&quot; role=&quot;inner&quot;/&gt;
+  &lt;tag k=&quot;leisure&quot; v=&quot;park&quot;/&gt;
+  &lt;tag k=&quot;type&quot; v=&quot;multipolygon&quot;/&gt;
+&lt;/relation&gt;
+</code></pre><br/>
+member — участники отношения;<br/>
+type — тип объекта (node, way, relation);<br/>
+ref — ссылка на id объекта;<br/>
+role — роль объекта в отношении.<br/>
+<br/>
+В данном примере описывается мультиполигон (multipolygon) — парк с внутренними областями (это могут быть, например, пруды, поляны или наоборот места с растительностью).<br/>
+<br/>
+Примечание: далеко не все мультиполигоны так описаны.<br/>
+</div></div><br/>
+Несмотря, на вроде-бы высокие функциональные возможности, отношения в OSM используются мало. Хотя есть попытки применять отношения к разным объектам. Например, такой сугубо точечный объект как <a href="http://wiki.openstreetmap.org/wiki/RU:Tag:highway%3Dbus_stop">автобусная остановка</a>, по данным внутренней статистики OSM (статистика ведётся для большинства объектов) представлен: 1572243 точками, 2479 линиями и 1140 отношениями.<br/>
+<br/>
+<h5>Объекты и теги (tag)</h5><br/>
+Объект — это элемент (точка, линия, отношение) с набором тегов (атрибутов). Тег (tag) определён как k=«ключ» v=«значение». Если элемент не имеет тегов, то он не является объектом, а входит в состав других объектов (с тегами тоже может входить).<br/>
+<br/>
+Обязательных тегов у объекта нет. Нет обязательных требований по количеству, содержанию и порядку следования тегов. Тот кто вносит данные в OSM, сам определяет состав и содержание тегов (<a href="http://wiki.openstreetmap.org/wiki/RU:%D0%9E%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D1%8B_%D0%BA%D0%B0%D1%80%D1%82%D1%8B">Перечень рекомендованных к использованию общепринятых тегов</a>).<br/>
+<br/>
+В разных странах, регионах или областях одинаковые объекты могут значительно различаться по составу и содержанию тегов. Например, <a href="http://wiki.openstreetmap.org/wiki/RU:Tag:place%3Dcity">город (city)</a> может быть обозначен точкой или линией (полигоном). В OSM-статистике видны явные региональные предпочтения.<br/>
+<br/>
+Города, отмеченные точками: <img src="https://habrastorage.org/files/119/adc/7c5/119adc7c55b645348818e377683d8cd1.PNG" alt="Города, отмеченные точками"/><br/>
+<br/>
+Города, отмеченные линиями: <img src="https://habrastorage.org/files/902/8c2/e7e/9028c2e7eb5343f69d50dc9013b5ceda.PNG" alt="Города, отмеченные линиями"/><br/>
+<br/>
+Поэтому, прежде чем использовать новый объект, желательно его исследовать на предмет того, какие теги, фактически, в нём используются.<br/>
+<br/>
+<h5>Координаты и расстояния</h5><br/>
+Точные географические измерения довольно сложны. Надо учитывать: то что Земля не является идеальным шаром, высоту над уровнем моря, рельеф, <a href="https://ru.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA_%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D1%85_%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%86%D0%B8%D0%B9">разные модели проекций</a> для отображения шарообразной Земли на плоскость.<br/>
+<br/>
+В интернет картах используется проекция <a href="http://spatialreference.org/ref/epsg/4326/">EPSG:4326 – WGS-84</a>, которая базируется на широте и долготе спутниковой GPS навигации. Градусы указываются в десятичном виде: широта (lat=52.2600355), долгота (lon=0.0172928).<br/>
+<br/>
+Например, есть две точки (<a href="http://en.wikipedia.org/wiki/List_of_mountains_and_hills_of_Saint_Helena,_Ascension_and_Tristan_da_Cunha">вулканы на острове Тристана-да-Кунья</a>):<br/>
+ 1. Вулкан «Green Hill» (id=2079122352, lat=-37.1324274, lon=-12.3096104);<br/>
+ 2. Вулкан «Red Hill» (id=2079124574, lat=-37.1200039, lon=-12.2383527).<br/>
+<br/>
+<div class="spoiler"><b class="spoiler_title">Оценить точность</b><div class="spoiler_text">Длина одной угловой минуты широты на поверхности Земли равна (примерно) 1852 метра — (<a href="https://ru.wikipedia.org/wiki/%D0%9C%D0%BE%D1%80%D1%81%D0%BA%D0%B0%D1%8F_%D0%BC%D0%B8%D0%BB%D1%8F">одна морская миля</a>). «Примерно», потому что 1852 метра это среднее значение: 1862 м. на полюсе и 1843 м. на экваторе.<br/>
+<br/>
+Длина одного градуса широты: 1852 * 60 = 111120 м. (Длина одного градуса долготы: 1852 * 60 * COS(угла широты)).<br/>
+<br/>
+Таким образом координаты точки в OSM (0.0000001) указаны с точностью ~ 1 см.<br/>
+</div></div><br/>
+<div class="spoiler"><b class="spoiler_title">Вычислить расстояние между точками</b><div class="spoiler_text">Расстояние между двумя близлежащими точками (без учёта шарообразности Земли) можно вычислять по теореме Пифагора.<br/>
+<br/>
+Расстояние между вулканами «Green Hill» и «Red Hill»:<br/>
+ ²√((37.1324274 — 37.1200039)² + (12.3096104 — 12.2383527)²) = ²√0.00523200316154 ≈ 0.072332587 (или 0.072332587 * 111120 ≈ 8037.6 метров)<br/>
+</div></div><br/>
+<div class="spoiler"><b class="spoiler_title">Перевести значения координат из десятичного вида в угловой и обратно</b><div class="spoiler_text">В угловой вид:<br/>
+37.1324274 = 37°<br/>
+Десятичный остаток в минуты: 0.1324274° * 60 = 7.945644'<br/>
+Десятичный остаток в секунды: 0.945644' * 60 = 56.73864&quot; ≈ 57&quot;<br/>
+Итого: 37.1324274° ≈ 37°07'57&quot;<br/>
+<br/>
+В десятичный вид:<br/>
+ 37°07'57&quot; = 37° + 7/60 + 57/3600 ≈ 37 + 0.11666667 + 0.01583333 ≈ 37.1325°<br/>
+<br/>
+С учётом всех округлений, погрешность составила:<br/>
+ 37.1325° — 37.1324274° = 0.0000726° (или 0.0000726 * 111120 ≈ 8 метров)<br/>
+</div></div><br/>
+<h4>Откуда загрузить OSM-данные</h4><br/>
+Данные OSM хранятся в базе данных (БД). На регулярной основе происходит подготовка снимка БД в XML-формате в файл <a href="http://planet.openstreetmap.org/">planet.osm</a>. Заархивированный bzip2 файл занимает 45Gb, в распакованном виде — более 600Gb. Кроме этого есть <a href="http://wiki.openstreetmap.org/wiki/RU:Planet.osm">зеркала planet.osm и ссылки на интернет-ресурсы</a>, откуда можно скачать OSM-данные порезанные по регионам.<br/>
+<br/>
+Для примеров публикации данные взяты с сервера <a href="http://download.geofabrik.de/">geofabrik</a>. Данные удобно порезаны по регионам и выложены, для выгрузки, в разных форматах: Shape-файлы (shp.zip), PBF-файлы (osm.pbf), XML-файлы (osm.bz2). В примерах публикации используются XML-файлы.<br/>
+<br/>
+При чтении XML надо учитывать:<br/>
+<div class="spoiler"><b class="spoiler_title">Высокую степень целостности XML-файлов:</b><div class="spoiler_text">Целостность означает:<br/>
+ — Все объекты представлены в XML-файле один раз.<br/>
+ — Все ссылки на id объектов будут присутствовать в XML-файле (например, при описании линии не будет ссылок на несуществующие точки).<br/>
+ — Если объект частично выходит за границы описываемой области, он всё-равно будет описан полностью. Поэтому в двух XML-файлах, описывающих граничные области, возникают дубликаты объектов, которые переходят из одной области в другую. Например, если дублируется relation, то дублируются и way, и node и relation, которые в него входят.<br/>
+</div></div><br/>
+<div class="spoiler"><b class="spoiler_title">Отличия в организации XML-данных, взятых из разных источников:</b><div class="spoiler_text">Пример следования XML-атрибутов <a href="http://download.geofabrik.de/">geofabrik</a>:<br/>
+<pre><code class="xml">&lt;node id=&quot;231477&quot; lat=&quot;52.2600355&quot; lon=&quot;0.0172928&quot; version=&quot;2&quot; timestamp=&quot;2011-02-27T02:33:27Z&quot; changeset=&quot;7406582&quot; uid=&quot;39894&quot; user=&quot;markpeers&quot;/&gt;
+</code></pre><br/>
+Пример следования XML-атрибутов <a href="http://gis-lab.info/projects/osm_dump/">gis-lab</a>:<br/>
+<pre><code class="xml">&lt;node id=&quot;36725955&quot; version=&quot;7&quot; timestamp=&quot;2012-02-05T19:48:59Z&quot; uid=&quot;237247&quot; user=&quot;masta&quot; changeset=&quot;10597500&quot; lat=&quot;43.0735049&quot; lon=&quot;47.4662786&quot;/&gt;
+</code></pre><br/>
+</div></div><br/>
+<div class="spoiler"><b class="spoiler_title">При описании линии, порядок следования точек менять нельзя:</b><div class="spoiler_text">Пример замкнутой линии (простое четырёхугольное строение):<br/>
+<pre><code class="xml">&lt;way id=&quot;243383077&quot; version=&quot;1&quot; timestamp=&quot;2013-10-25T08:52:05Z&quot; uid=&quot;371711&quot; user=&quot;knockpenny&quot; changeset=&quot;18532019&quot;&gt;
+  &lt;nd ref=&quot;2508041246&quot;/&gt;
+  &lt;nd ref=&quot;2508041226&quot;/&gt;
+  &lt;nd ref=&quot;2508041210&quot;/&gt;
+  &lt;nd ref=&quot;2508041208&quot;/&gt;
+  &lt;nd ref=&quot;2508041246&quot;/&gt;
+  &lt;tag k=&quot;building&quot; v=&quot;yes&quot;/&gt;
+&lt;/way&gt;
+</code></pre><br/>
+</div></div><br/>
+<br/>
+<h4>Пояснения к примерам</h4><br/>
+В публикации рассматривается два примера получения данных:<br/>
+ 1. node-объекты (страны, города с миллионным населением, вулканы);<br/>
+ 2. way-объекты (пустыни).<br/>
+<br/>
+Типы данных выбраны так, чтобы, после обработки полных OSM-данных, был получен понятный и наглядный контент, но, при этом, файлы результатов не были бы слишком большими и их можно было показать на карте.<br/>
+<br/>
+<div class="spoiler"><b class="spoiler_title">Почему не утилита?</b><div class="spoiler_text">А почему бы просто не разработать утилиту, в которой предусмотреть все возможные механизмы фильтрации и отбора OSM-данных? Идея такая была (и даже попытка её реализовать). Но ничего не вышло. Действительно, работа с OSM-XML проста. Но логика условий отбора и взаимодействия тегов объектов может быть совершенно непредсказуемой. Поэтому проще иметь, своего рода, шаблон, который легко может быть доработан для получения нужных данных. Примеры и являются такими шаблонами.<br/>
+</div></div><br/>
+<div class="spoiler"><b class="spoiler_title">При разработке примеров были учтены следующие требования:</b><div class="spoiler_text"> 1. OSM-данные должны браться прямо из архива;<br/>
+ 2. Данные результатов должны быть представлены в форматах CSV и geoJSON;<br/>
+ 3. Очень хорошо, если будет обеспечена работа на любом (от минимального до полного) объёме OSM-данных;<br/>
+ 4. Очень хорошо, если будет обеспечена очистка данных от дубликатов;<br/>
+ 5. Очень хорошо, если будет обеспечена работоспособность на разных ОС;<br/>
+ 6. Примеры должны быть полностью функционально-завершёнными и работоспособными.<br/>
+</div></div><br/>
+<h5>Обработка OSM-файлов</h5><br/>
+OSM-XML берётся прямо из заархивированных bzip2 файлов (*.osm.bz2). Для работы с архивом используется библиотека <a href="http://icsharpcode.github.io/SharpZipLib/">SharpZipLib</a>. При обработке файлов большого размера, проблем не было обнаружено.<br/>
+<div class="spoiler"><b class="spoiler_title">Последовательно обрабатываются все *.osm.bz2 файлы во входной директории:</b><div class="spoiler_text"><pre><code>//..
+// Директории для входных и выходных файлов
+//
+string dirIn = @&quot;.\in\&quot;; // где лежат файлы (*.osm.bz2)
+string dirOut = @&quot;.\out\&quot;; // куда сохранять результат
+
+//..
+// если директории для результатов нет - создать
+//
+if (!Directory.Exists(dirOut)) 
+    Directory.CreateDirectory(dirOut);
+//..
+// обработать все *.osm.bz2 файлы во входной директории
+//
+foreach (string fileFullName in Directory.GetFiles(dirIn, &quot;*.osm.bz2&quot;))
+{
+    FileInfo fileInfo = new FileInfo(fileFullName);
+    using (FileStream fileStream = fileInfo.OpenRead())
+    {
+        using (Stream unzipStream = new ICSharpCode.SharpZipLib.BZip2.BZip2InputStream(fileStream))
+        {
+            XmlReader xmlReader = XmlReader.Create(unzipStream);
+
+            while (xmlReader.Read())
+            {
+                if (xmlReader.Name == &quot;node&quot;)
+                     OSM_ProcessNode(xmlReader.ReadOuterXml());
+                else if (xmlReader.Name == &quot;way&quot;)
+                     OSM_ProcessWay(xmlReader.ReadOuterXml());
+                else if (xmlReader.Name == &quot;relation&quot;)
+                    OSM_ProcessRelation(xmlReader.ReadOuterXml());
+            }
+        }
+    }
+    OSM_WriteResultToFiles();  // Записать данные в форматах csv и geojson
+}
+</code></pre><br/>
+</div></div><br/>
+<div class="spoiler"><b class="spoiler_title">Условия отбора объектов:</b><div class="spoiler_text">Для того, чтобы найти нужный объект, надо проанализировать все теги (Key:Value пары). Например, так определены условия отбора way-объектов (пустыни):<br/>
+<pre><code>private static void OSM_ProcessWay(string xmlWay)
+{
+  XmlDocument xmlDoc = new XmlDocument();
+  xmlDoc.LoadXml(xmlWay);
+
+  long wayId = Int64.Parse(xmlDoc.DocumentElement.Attributes[&quot;id&quot;].Value);
+
+  foreach (XmlNode wayTag in xmlDoc.DocumentElement.ChildNodes)
+  {
+     if (wayTag.Name == &quot;tag&quot; && wayTag.Attributes[&quot;k&quot;].Value == &quot;natural&quot; && wayTag.Attributes[&quot;v&quot;].Value == &quot;desert&quot;)
+     {
+        //.. логика обработки для найденного типа
+     }          
+  }
+}
+</code></pre><br/>
+Для поиска другого объекта надо просто указать другую Key:Value пару значений или несколько пар, если одновременно надо найти несколько объектов разных типов.<br/>
+</div></div><br/>
+<div class="spoiler"><b class="spoiler_title">Отобранные точечные объекты сохраняются в строковые буфера:</b><div class="spoiler_text">При обработке node-объектов, отобранные данные, подготовленные в строковом виде, записываются в строковый буфер. После обработки очередного OSM-файла, буфер записывается в файлы результатов и обнуляется. Периодическая запись в файлы результатов нужна, для того, чтобы не перегружать систему (ошибки типа — out of memory).<br/>
+<pre><code>// Country
+//
+static StringBuilder sbCsvCountry = new StringBuilder();
+static StringBuilder sbGeojsonCountry = new StringBuilder();
+
+// City
+//
+static StringBuilder sbCsvCity = new StringBuilder();
+static StringBuilder sbGeojsonCity = new StringBuilder();
+
+static int numPopulationCityFiltr = 1000000; // фильтр для атрибута Population (показывать города &gt;= numPopulationCityFiltr)
+
+// Volcano
+//
+static StringBuilder sbCsvVolcano = new StringBuilder();
+static StringBuilder sbGeojsonVolcano = new StringBuilder();
+</code></pre><br/>
+В примере обработки node-объектов все way- и relation-объекты учитываются для статистики (которую можно посмотреть в журнале).<br/>
+</div></div><br/>
+<div class="spoiler"><b class="spoiler_title">Для сохранения линий используются структуры (в виде списков классов):</b><div class="spoiler_text">Подготовка way-объектов проходит в два этапа (фактически, два полных XML-парсинга одного и того-же файла). Сперва определяются все way-объекты. Затем, при повторном парсинге, определяются широта (lat) и долгота (lon) всех точек (node), входящих в way-объекты. Дело в том, что описание точек (node) идёт перед описанием линий (way).<br/>
+<pre><code>// структуры хранения
+//
+class NodeAttrItem // для node-тегов (здесь только node, которые входят в way и имеют собственные теги)
+{
+    public long NodeId = 0;
+    public double Lat = 0;
+    public double Lon = 0;
+    public string Type;
+    public string Name;
+    public string NameEn;
+    public string NameRu;
+    public string Attrs;
+}
+
+class WayAttrItem // для way-тегов
+{
+    public long WayId = 0;
+    public string Type;
+    public string Name;
+    public string NameEn;
+    public string NameRu;
+    public string Attrs;
+}
+
+class WayToNodeItem // для определения линий
+{
+    public long WayId = 0;
+    public long NodeId = 0;
+    public double Lat = 0;
+    public double Lon = 0;
+}
+
+// данные результатов хранятся в виде списков
+//
+static List&lt;NodeAttrItem&gt; nodeAttrList = new List&lt;NodeAttrItem&gt;();
+static List&lt;WayAttrItem&gt; wayAttrList = new List&lt;WayAttrItem&gt;();
+static List&lt;WayToNodeItem&gt; wayToNodeList = new List&lt;WayToNodeItem&gt;();
+</code></pre><br/>
+Фактически, когда надо выбрать много объектов (например, береговые линии, дороги), могут возникать ошибки типа «Out of memory». Для устранения таких ошибок достаточно периодически записывать полученные данные в файлы результатов (например, после обработки очередного файла).<br/>
+</div></div><br/>
+<h5>CSV и geoJSON</h5><br/>
+Формат CSV компактен и удобен для записи большого количества данных, которые потом можно легко импортировать, например, в БД.<br/>
+<br/>
+Формат geoJSON, напротив, избыточен и «многословен» по структуре, но удобен тем, что данные сразу готовы для показа на карте. В примерах, для визуализации, используется возможность GitHub по отображению геоданных (файлы с расширением geojson).<br/>
+<br/>
+<div class="spoiler"><b class="spoiler_title">Немного о том как реализован geojson:</b><div class="spoiler_text"><pre><code>// Глобальный заголовок - достаточно иметь один для всего файла
+//
+string geojsonHeader = &quot;{\&quot;type\&quot;:\&quot;FeatureCollection\&quot;,\&quot;features\&quot;:[&quot;;
+string geojsonFooter = Environment.NewLine + &quot;{}]}&quot;;
+
+// Заголовок для каждого нового объекта (way или node)
+//
+string geojsonFeatureBegin = Environment.NewLine + &quot;{&quot; + Environment.NewLine + &quot;\&quot;type\&quot;:\&quot;Feature\&quot;,&quot; + Environment.NewLine + &quot;\&quot;geometry\&quot;:&quot;;
+string geojsonFeatureEnd = Environment.NewLine + &quot;},&quot;;
+
+// Описание node
+//
+string geojsonPointBegin = &quot;{\&quot;type\&quot;:\&quot;Point\&quot;,\&quot;coordinates\&quot;:&quot;;
+string geojsonPointEnd = &quot;},&quot;;
+
+// Описание way (в данном случае Polygon)
+//
+string geojsonPolygonBegin = &quot;{\&quot;type\&quot;:\&quot;Polygon\&quot;,\&quot;coordinates\&quot;:[[&quot;;
+string geojsonPolygonEnd = &quot;]]}&quot;;
+
+// Описание тегов
+//
+string geojsonPropBegin = Environment.NewLine + &quot;\&quot;properties\&quot;:{&quot;;
+string geojsonPropEnd = &quot;}&quot;;
+</code></pre><br/>
+Переносы строк, при подготовке geojson, используются для удобства просмотра. Иногда в OSM-XML встречаются комбинации символов, которые могут сделать geoJSON невалидным. Это происходит, когда XML-данные корректны, а, после парсинга, JSON воспринимает их как ошибку (причины ошибок приходится искать в довольно больших файлах). Например, надо исправлять двойные кавычки [&quot;], если они встречаются в тегах. В примере двойные кавычки исправляются на одинарные [']. Или широта/долгота могут указываться как, например, «32.» (исправляется на «32.0»).<br/>
+<br/>
+Для того, чтобы линии не терялись на карте, они помечаются точками, которые хорошо видны (в примере каждая линия помечается точечным объектом, теги которого взяты у линии — функция OSM_WriteResultToFilesGeojson).<br/>
+</div></div><br/>
+<h5>Пояснения по работе с XML</h5><br/>
+<div class="spoiler"><b class="spoiler_title">При обращении к атрибутам указываются имена, а не индексы:</b><div class="spoiler_text">При чтении XML-элементов и XML-атрибутов желательно указывать имя, а не индекс. Это конечно немного замедляет работу, зато гарантирует от неприятных сюрпризов, например, когда OSM-данные взяты из разных источников с разным порядком атрибутов.<br/>
+<pre><code>xmlDoc.DocumentElement.Attributes[&quot;lat&quot;].Value;
+xmlDoc.DocumentElement.Attributes[&quot;lon&quot;].Value;
+</code></pre><br/>
+</div></div><br/>
+<div class="spoiler"><b class="spoiler_title">Все теги сохраняются в CSV как Key:Value пары:</b><div class="spoiler_text">При чтении тегов объекта, XML-блок перечитывается два раза. Первый раз, чтобы определить тип объекта. Второй раз, если найден искомый объект, для того чтобы сохранить теги.<br/>
+<pre><code>// первое чтение - для определения искомого объекта
+//
+foreach (XmlNode nodeTag in xmlDoc.DocumentElement.ChildNodes)
+{
+  if (nodeTag.Name == &quot;tag&quot;)
+  {
+    if (nodeTag.Attributes[&quot;k&quot;].Value == &quot;place&quot; && nodeTag.Attributes[&quot;v&quot;].Value == &quot;country&quot;)
+    {
+       string strAttrs = &quot;&quot;;
+       bool isAttr = false;
+
+       // повторное чтение - для сохранения всех тегов
+       //
+       foreach (XmlNode nodeTag in xmlDoc.DocumentElement.ChildNodes)
+       {
+         if (nodeTag.Name == &quot;tag&quot;)
+         {
+           if (isAttr)
+              strAttrs += &quot;,&quot;;
+           else
+             isAttr = true;
+
+           strAttrs += String.Format(&quot;\&quot;{0}\&quot;:\&quot;{1}\&quot;&quot;, nodeTag.Attributes[&quot;k&quot;].Value, nodeTag.Attributes[&quot;v&quot;].Value.Replace('\&quot;', '\''));
+         }
+       }
+    }
+  }
+}
+
+</code></pre><br/>
+Полный состав тегов нужен, например, если надо проанализировать состав всех тегов по новому объекту. У некоторых объектов (большие города, страны) тегов может быть очень много. Полный состав тегов сохраняется только в CSV-файле.<br/>
+</div></div><br/>
+<h4>Быстродействие и дубликаты</h4><br/>
+Факторы, которые оказывают влияние на быстродействие:<br/>
+<div class="spoiler"><b class="spoiler_title">1. Скорость чтения OSM-файла (разархивирование и парсинг XML-элементов):</b><div class="spoiler_text">Для node-объектов OSM-файл должен быть прочитан 1 раз, а для way-объектов — 2 раза.<br/>
+<br/>
+Необходимость двойного чтения вызвана тем, что в XML-файле сперва идут node-, и только за ними way-объекты. В данном случае двойное чтение просто упрощает алгоритм, позволяя избежать применения промежуточных структур для хранения широты и долготы точек.<br/>
+</div></div><br/>
+<div class="spoiler"><b class="spoiler_title">2. Удаление дубликатов и установка широты и долготы для точек, входящих в way:</b><div class="spoiler_text">Чтобы не создавать дубликаты объектов и уменьшить время определения широты и долготы точек, входящих в way, используется единый механизм, основанный на применении индексных массивов. Такой подход позволяет значительно увеличить скорость обработки за счёт оптимизации поисковых операций.<br/>
+<br/>
+В примере с пустынями (для Африки) разница во времени обработки — без индексного массива (useIndexedCheck = false) ≈ 3.5 часа, с индексным массивом (useIndexedCheck = true) ≈ 1 час. Но, если, например, надо выбрать все дороги или береговые линии на полных данных OSM, то без индексации время обработки может растянуться на дни и даже недели (чем больше количество выбранных объектов — тем больше расход времени), а с индексацией — всё время займёт немногим более суток.<br/>
+<br/>
+Как это работает?<br/>
+<br/>
+Если, при каждом новом парсинге node или way, знать — был ли объект с таким id уже обработан раньше?, то становится просто выявлять дубликаты.<br/>
+<br/>
+Если быстро (без поиска) определить, что считанная точка входит в линию, то это даёт значительный выигрыш по скорости. Так как общее количество точек может быть весьма значительным (более трёх миллиардов на полных данных), то и затраты времени на поисковые операции для каждой точки (по внутренним массивам nodeAttrList, wayAttrList, wayToNodeList), с накоплением данных, превращаются в значительные. То есть — применение индексного массива помогает избавиться от «холостых» поисковых операций.<br/>
+<br/>
+Как это организовано в коде?<br/>
+<br/>
+Для node- и way-объектов создаются массивы размерностью не менее максимального значения id для данного объекта (для определения максимального значения id используются значения статистики). В массивах для каждого node- или way-объекта выделяется ячейка размером byte, где индекс ячейки соответствует id объекта.<br/>
+<pre><code>bool useIndexedCheck = true; // использовать/не использовать индексный массив
+                             // если не использовать (false), то при обработке более одного *.bz2 файла, на границах соседних областей могут появляться дубликаты объектов
+                             // если использовать (true), то потребуется дополнительно &gt; 4 GB RAM
+//--
+long wayIdxSize = 512 * 1024 * 1024 - 1;
+byte[] wayIdx;
+long nodeIdxSize = (2L * 1024 * 1024 * 1024 - 57 - 1);
+byte[] nodeIdx1;
+byte[] nodeIdx2;
+
+//-- если использовать индексный массив, то потребуется дополнительно &gt; 4 GB RAM
+//
+if (useIndexedCheck)
+{
+    wayIdx = new byte[wayIdxSize + 1];
+    nodeIdx1 = new byte[nodeIdxSize + 1];
+    nodeIdx2 = new byte[nodeIdxSize + 1];
+}
+</code></pre><br/>
+При проверке нового node или way (при парсинге XML) происходит увеличение значения в индексированной ячейке на единицу.<br/>
+<pre><code>// проверка на дубликаты
+//
+if (useIndexedCheck)
+{
+   if(OSM_WayIdxAdd(wayId) &gt; 1)
+      return;
+}
+
+//..
+
+// функция установки признака дупликата в индексном массиве
+//
+private static byte OSM_NodeIdxAdd(long nodeId)
+{
+  if (nodeId &lt;= nodeIdxSize)
+    return ++nodeIdx1[nodeId];
+
+  return ++nodeIdx2[nodeId - nodeIdxSize];
+}
+</code></pre><br/>
+Если значение в индексированной ячейке массива больше нуля, то объект с таким id уже был считан, а само значение будет указывать на количество повторений.<br/>
+<pre><code>// функция подсчёта дубликатов
+//
+private static long OSM_NodeIdxDuplCount()
+{
+  long numDupl = 0;
+
+  for (long n = 0; n &lt;= nodeIdxSize; n++)
+  {
+    if (nodeIdx1[n] &gt; 2) numDupl++;
+    if (nodeIdx2[n] &gt; 2) numDupl++;
+  }
+  return numDupl;
+}
+</code></pre><br/>
+</div></div><br/>
+<h4>Работоспособность на разных ОС</h4><br/>
+Здесь главная заслуга разработчиков Mono (за что им уважение и благодарность).<br/>
+<br/>
+Оба примера разработаны на Visual Studio Community 2015 под Windows 7. Далее, полученный EXE-файл и библиотека ICSharpCode.SharpZipLib.dll (как есть) были перенесены в Linux (проверялось на OpenSuse, Mint, Ubuntu под Oracle Virtual Box) и выполнялись под Mono (<a href="http://www.mono-project.com/download/">последняя версия Mono</a>). Всё заработало сразу, без проблем и дополнительных настроек.<br/>
+<br/>
+<div class="spoiler"><b class="spoiler_title">Для возможности работы в разных ОС, в код внесено несколько доработок:</b><div class="spoiler_text">Исправление пути.<br/>
+<pre><code>//..
+string dirIn = @&quot;.\in\&quot;; // где лежат файлы (*.bz2)
+string dirOut = @&quot;.\out\&quot;; // куда сохранять результат (если директории нет - создаётся автоматически)
+//..
+OperatingSystem os = Environment.OSVersion;
+PlatformID pid = os.Platform;
+
+if (pid == PlatformID.Unix || pid == PlatformID.MacOSX) // 0 - Win32S, 1 - Win32Windows, 2 - Win32NT, 3 - WinCE, 4 - Unix, 5 - Xbox, 6 - MacOSX
+{
+    dirIn = dirIn.Replace(@&quot;\&quot;, @&quot;/&quot;);
+    dirOut = dirOut.Replace(@&quot;\&quot;, @&quot;/&quot;);
+}
+</code></pre><br/>
+Для перехода на новую строку надо использовать Environment.NewLine.<br/>
+<pre><code>string geojsonFeatureBegin = Environment.NewLine + &quot;{&quot; + Environment.NewLine + &quot;\&quot;type\&quot;:\&quot;Feature\&quot;,&quot; + Environment.NewLine + &quot;\&quot;geometry\&quot;:&quot;;
+string geojsonFeatureEnd = Environment.NewLine + &quot;},&quot;;
+</code></pre><br/>
+</div></div><br/>
+<h4>Примеры на GitHub</h4><br/>
+Примеры кода (шаблоны консольных программ):<br/>
+ <a href="https://github.com/apelserg/data-osm-getdata/blob/master/code/osmnode.cs">Получение node-объектов</a><br/>
+ <a href="https://github.com/apelserg/data-osm-getdata/blob/master/code/osmway.cs">Получение way-объектов</a><br/>
+<br/>
+Примеры полученных геоданных (geoJSON):<br/>
+ <a href="https://github.com/apelserg/data-osm-getdata/blob/master/geojson/osmnode-country.geojson">Все государства на Земле.</a><br/>
+ <a href="https://github.com/apelserg/data-osm-getdata/blob/master/geojson/osmnode-city.geojson">Все города на Земле с населением более миллиона человек.</a><br/>
+ <a href="https://github.com/apelserg/data-osm-getdata/blob/master/geojson/osmnode-volcano.geojson">Все вулканы на Земле.</a><br/>
+ <a href="https://github.com/apelserg/data-osm-getdata/blob/master/geojson/osmway-desert.geojson">Все пустыни на Земле.</a><br/>
+<br/>
+<h4>Ссылки</h4><br/>
+<a href="http://wiki.openstreetmap.org/wiki/RU:%D0%9E%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D1%8B_%D0%BA%D0%B0%D1%80%D1%82%D1%8B">Объекты карты (перечень рекомендованных к использованию общепринятых тегов)</a><br/>
+<a href="http://wiki.openstreetmap.org/wiki/RU:%D0%AD%D0%BB%D0%B5%D0%BC%D0%B5%D0%BD%D1%82%D1%8B_%D0%BA%D0%B0%D1%80%D1%82%D1%8B">Элементы карты</a><br/>
+<a href="http://wiki.openstreetmap.org/wiki/RU:Planet.osm">Снимок базы данных Planet.osm</a><br/>
+<a href="http://wiki.openstreetmap.org/wiki/Database">Схема базы данных</a><br/>
+<a href="https://ru.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA_%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D1%85_%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%86%D0%B8%D0%B9">Модели проекций</a><br/>
+<a href="https://en.wikipedia.org/wiki/GeoJSON">Спецификация GeoJSON</a><br/>
+<a href="http://habrahabr.ru/post/183288/">Автоматическое отображение на GitHub данных в формате geoJSON</a><br/>
+<a href="http://download.geofabrik.de/">Данные на geofabrik</a><br/>
+<a href="http://gis-lab.info/projects/osm_dump/">Данные на gis-lab</a><br/>
+<a href="http://wiki.openstreetmap.org/wiki/Frameworks">Программы и фреймворки для работы с OSM</a><br/>
+<a href="http://icsharpcode.github.io/SharpZipLib/">Библиотека для работы с архивами (SharpZipLib)</a><br/>
+<a href="http://www.mono-project.com/download/">Скачать Mono</a></div>
+    
+    <div class="post__tags">
+  <ul class="tags icon_tag">
+      <li ><a href="https://habrahabr.ru/search/?q=%5Bopenstreetmap%5D&target_type=posts" rel="tag">openstreetmap</a>, </li>
+      <li ><a href="https://habrahabr.ru/search/?q=%5Bosm%5D&target_type=posts" rel="tag">osm</a>, </li>
+      <li ><a href="https://habrahabr.ru/search/?q=%5B%D0%B3%D0%B5%D0%BE%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5%5D&target_type=posts" rel="tag">геоданные</a>, </li>
+      <li ><a href="https://habrahabr.ru/search/?q=%5Bgeojson%5D&target_type=posts" rel="tag">geojson</a></li>
+  </ul>
+</div>
+  </div>
+</div>
+
+
+        </div>
+      </div>
+
+      <div class="sidebar_right sidebar_content-area">
+            <div class="xyz_wrapper is_visible">
+    <div class="xyz_wrapper_inner">
+      <span class="xyz_wrapper_text">Реклама помогает поддерживать и&nbsp;развивать наши сервисы<br/><br/><a href="/adblock/" class="xyz_wrapper_button" target="_blank">Подробнее</a></span>
+      <div class="no_please_one_one_one" style="min-height: 270px;">
+        <script type="text/javascript">
+
+          $(document).ready(function(){
+            if (typeof(adb1) == 'undefined' || adb1 == 'yes'){ $('.no_please_one_one_one').hide(); }
+          });
+
+          if (typeof(AdFox_getCodeScript) != 'undefined'){
+
+            if (typeof(pr) == 'undefined') { var pr = Math.floor(Math.random() * 4294967295) + 1; }
+            if (typeof(document.referrer) != 'undefined') {
+              if (typeof(afReferrer) == 'undefined') {
+                afReferrer = encodeURIComponent(document.referrer);
+              }
+            } else {
+              afReferrer = '';
+            }
+            var addate = new Date();
+            var dl = encodeURIComponent(document.location);
+            var pr1 = Math.floor(Math.random() * 4294967295) + 1;
+
+            document.write('<div id="AdFox_banner_'+pr1+'" style="background:#fff;"><\/div>');
+            document.write('<div style="visibility:hidden; position:absolute;"><iframe id="AdFox_iframe_'+pr1+'" width=1 height=1 marginwidth=0 marginheight=0 scrolling=no frameborder=0><\/iframe><\/div>');
+
+            AdFox_getCodeScript(1,pr1,'//ads.adfox.ru/249077/prepareCode?pp=g&amp;ps=cgto&amp;p2=fjon&amp;pct=a&amp;plp=a&amp;pli=a&amp;pop=a&amp;pr=' + pr +'&amp;pt=b&amp;pd=' + addate.getDate() + '&amp;pw=' + addate.getDay() + '&amp;pv=' + addate.getHours() + '&amp;prr=' + afReferrer + '&amp;dl='+dl+'&amp;pr1='+pr1+'&amp;pk=h_openstreetmap%20f_develop&amp;pke=1');
+          }
+        </script>
+      </div>
+    </div>
+    <a href="https://special.habrahabr.ru/advertising/" class="firskill__label">Реклама</a>
+  </div>
+
+          
+
+  <div class="sidebar-block sidebar-block_top-hubs js-tophubs">
+    <h2 class="sidebar-block__title">Хабы</h2>
+    <div class="sidebar-block__content">
+      <ul class="content-list top-hubs">
+          <li class="content-list__item top-hubs__item">
+            <a href="https://habrahabr.ru/hub/programming/" class="content-list__item-link top-hubs__item-title" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'hubs', 'Программирование'); }">Программирование</a>
+          </li>
+          <li class="content-list__item top-hubs__item">
+            <a href="https://habrahabr.ru/hub/java/" class="content-list__item-link top-hubs__item-title" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'hubs', 'JAVA'); }">JAVA</a>
+          </li>
+          <li class="content-list__item top-hubs__item">
+            <a href="https://habrahabr.ru/hub/angularjs/" class="content-list__item-link top-hubs__item-title" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'hubs', 'AngularJS'); }">AngularJS</a>
+          </li>
+          <li class="content-list__item top-hubs__item">
+            <a href="https://habrahabr.ru/hub/javascript/" class="content-list__item-link top-hubs__item-title" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'hubs', 'JavaScript'); }">JavaScript</a>
+          </li>
+          <li class="content-list__item top-hubs__item">
+            <a href="https://habrahabr.ru/hub/algorithms/" class="content-list__item-link top-hubs__item-title" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'hubs', 'Алгоритмы'); }">Алгоритмы</a>
+          </li>
+          <li class="content-list__item top-hubs__item">
+            <a href="https://habrahabr.ru/hub/windows_dev/" class="content-list__item-link top-hubs__item-title" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'hubs', 'Разработка под Windows'); }">Разработка под Windows</a>
+          </li>
+          <li class="content-list__item top-hubs__item">
+            <a href="https://habrahabr.ru/hub/ecommerce_development/" class="content-list__item-link top-hubs__item-title" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'hubs', 'Разработка под e-commerce'); }">Разработка под e-commerce</a>
+          </li>
+          <li class="content-list__item top-hubs__item">
+            <a href="https://habrahabr.ru/hub/ReactJS/" class="content-list__item-link top-hubs__item-title" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'hubs', 'ReactJS'); }">ReactJS</a>
+          </li>
+          <li class="content-list__item top-hubs__item">
+            <a href="https://habrahabr.ru/hub/s_admin/" class="content-list__item-link top-hubs__item-title" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'hubs', 'Серверное администрирование'); }">Серверное администрирование</a>
+          </li>
+          <li class="content-list__item top-hubs__item">
+            <a href="https://habrahabr.ru/hub/server_side_optimization/" class="content-list__item-link top-hubs__item-title" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'hubs', 'Серверная оптимизация'); }">Серверная оптимизация</a>
+          </li>
+      </ul>
+    </div>
+    <div class="sidebar-block__footer">
+      <a href="/flows/develop/hubs/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'hubs', 'all_hubs'); }">Все хабы</a>
+    </div>
+  </div>
+
+
+            <div class="js-ad_sticky"><div class="xyz_wrapper">
+  <div class="xyz_wrapper_inner">
+    <span class="xyz_wrapper_text">Реклама помогает поддерживать и&nbsp;развивать наши сервисы<br/><br/><a href="/adblock/" class="xyz_wrapper_button" target="_blank">Подробнее</a></span>
+
+    <!-- Яндекс.Директ -->
+    <div id="yandex_ad" style="background: #fff;"></div>
+    <script type="text/javascript">
+    (function(w, d, n, s, t) {
+        w[n] = w[n] || [];
+        w[n].push(function() {
+            Ya.Direct.insertInto(149298, "yandex_ad", {
+                stat_id: 8,
+                ad_format: "direct",
+                font_family: "verdana",
+                type: "posterVertical",
+                border_type: "block",
+                limit: 2,
+                title_font_size: 3,
+                border_radius: true,
+                links_underline: false,
+                site_bg_color: "FFFFFF",
+                border_color: "FBE5C0",
+                title_color: "0066CC",
+                url_color: "006600",
+                text_color: "000000",
+                hover_color: "0066FF",
+                sitelinks_color: "0066CC",
+                favicon: true,
+                no_sitelinks: false
+            });
+        });
+        t = d.getElementsByTagName("script")[0];
+        s = d.createElement("script");
+        s.src = "//an.yandex.ru/system/context.js";
+        s.type = "text/javascript";
+        s.async = true;
+        t.parentNode.insertBefore(s, t);
+    })(window, document, "yandex_context_callbacks");
+    </script>
+
+
+  </div>
+  <a href="https://special.habrahabr.ru/advertising/" class="firskill__label">Реклама</a>
+</div>
+</div>
+
+            
+
+    <div class="live-broadcast live-broadcast_habrahabr broadcast js-broadcast">
+      <h2 class="live-broadcast__title">Похожие публикации</h2>
+        <ul class="content-list content-list_similar-posts">
+            <li class="content-list__item">
+              <a href="/post/259667/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'similar_posts', 'common'); }">Установка OpenStreetMap Nominatim для нахождения широты и долготы по введенному адресу</a>&nbsp;&nbsp;<a href="/post/259667/#comments" class="content-list__item-counter icon_comments">28</a>
+            </li>
+            <li class="content-list__item">
+              <a href="/post/259141/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'similar_posts', 'common'); }">Русификация и мультиязычность карт OpenStreetMap</a>&nbsp;&nbsp;<a href="/post/259141/#comments" class="content-list__item-counter icon_comments">35</a>
+            </li>
+            <li class="content-list__item">
+              <a href="/post/245015/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'similar_posts', 'common'); }">Postgis тип данных Geometry на примере импортированных OpenStreetMap карт</a>&nbsp;&nbsp;<a href="/post/245015/#comments" class="content-list__item-counter icon_comments">28</a>
+            </li>
+            <li class="content-list__item">
+              <a href="/post/136437/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'similar_posts', 'common'); }">С IP-адресов Google осуществлён акт вандализма в отношении карт проекта OpenStreetMap</a>&nbsp;&nbsp;<a href="/post/136437/#comments" class="content-list__item-counter icon_comments">44</a>
+            </li>
+            <li class="content-list__item">
+              <a href="/post/73910/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'similar_posts', 'common'); }">Загрузка русских карт с OpenStreetMap в Garmin Oregon 300</a>&nbsp;&nbsp;<a href="/post/73910/#comments" class="content-list__item-counter icon_comments">2</a>
+            </li>
+        </ul>
+    </div>
+
+
+      </div>
+    </div>
+
+    <div class="column-wrapper">
+      <div class="content_left indented">
+        <div class="post-additionals">
+            <div class="infopanel_wrapper js-user_995384">
+    <ul class="postinfo-panel postinfo-panel_post" id="infopanel_post_270513">
+
+          <li class="postinfo-panel__item">
+            <div class="voting-wjt voting-wjt_infopanel js-voting  ">
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_plus js-plus" title="Голосовать могут только зарегистрированные пользователи.">
+                  <span>&uarr;</span>
+                </button>
+
+              <div class="voting-wjt__counter voting-wjt__counter_positive  js-mark">
+                  <span class="voting-wjt__counter-score js-score" title="Общий рейтинг 12: &uarr;12 и &darr;0">+12</span>
+              </div>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_minus js-minus" title="Голосовать могут только зарегистрированные пользователи.">
+                  <span>&darr;</span>
+                </button>
+
+            </div>
+          </li>
+
+      <li class="postinfo-panel__item">
+        <div class="views-count_post" title="Просмотры публикации">11,4k</div>
+      </li>
+
+      <li class="postinfo-panel__item">
+        <div class="favorite-wjt favorite">
+            <button type="button" disabled class="favorite-wjt__button favorite-wjt__button_disabled" onclick="return false;" title="Только зарегистрированные пользователи могут добавлять публикации в избранное">
+              <span>Добавить в избранное</span>
+            </button>
+          <span class="favorite-wjt__counter js-favs_count" title="Количество пользователей, добавивших публикацию в избранное">157</span>
+        </div>
+      </li>
+
+
+
+
+      <!-- шеринг в соцсети -->
+        <li class="postinfo-panel__item postinfo-panel__item_socials  postinfo-panel__item_socials_right ">
+          <ul class="post-share">
+            <li class="post-share__item">
+              <a href="https://twitter.com/intent/tweet?text=OpenStreetMap+%D0%BA%D0%B0%D0%BA+%D0%B8%D1%81%D1%82%D0%BE%D1%87%D0%BD%D0%B8%D0%BA+%D0%B3%D0%B5%D0%BE%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85+https://habr.ru/p/270513/+via+%40habrahabr+%23habr" class="post-share__item-link twitter" title="Опубликовать ссылку в Twitter" target="_blank"></a>
+            </li>
+            <li class="post-share__item">
+              <a href="https://vk.com/share.php?url=https://habrahabr.ru/post/270513/" class="post-share__item-link vkontakte" title="Опубликовать ссылку во ВКонтакте" onclick="window.open(this.href, 'Опубликовать ссылку во Вконтакте', 'width=800,height=300'); return false"></a>
+            </li>
+            <li class="post-share__item">
+              <a href="https://www.facebook.com/sharer/sharer.php?u=https://habrahabr.ru/post/270513/" class="post-share__item-link facebook" title="Опубликовать ссылку в Facebook" onclick="window.open(this.href, 'Опубликовать ссылку в Facebook', 'width=640,height=436,toolbar=0,status=0'); return false"></a>
+            </li>
+            <li class="post-share__item">
+              <a href="https://getpocket.com/edit?url=https://habrahabr.ru/post/270513/&title=OpenStreetMap как источник геоданных" target="_blank" class="post-share__item-link pocket" title="Добавить ссылку в Pocket"></a>
+            </li>
+          </ul>
+        </li>
+
+      <!-- кнопка пожаловаться -->
+    </ul>
+  </div>
+
+              
+
+  <div class="author-info ">
+    <a href="/users/apelserg" class="author-info__image" onclick="if (typeof ga === 'function') { ga('send', 'event', 'author_info_bottom', 'profile', 'apelserg');}">
+        <span class="user-pic_default user-pic_default_47 user-pic_blue"></span>
+    </a>
+
+    <div class="author-info__desc js-user_995384">
+      <div class="author-info__username">
+          <a href="/users/apelserg" class="author-info__name" onclick="if (typeof ga === 'function') { ga('send', 'event', 'author_info_bottom', 'profile', 'apelserg');}">Сергей</a>
+        <a href="/users/apelserg" class="author-info__nickname" onclick="if (typeof ga === 'function') { ga('send', 'event', 'author_info_bottom', 'profile', 'apelserg');}">@apelserg</a>
+
+        <div class="karma__widjet voting-wjt voting-wjt_small js-karma  " title="Карма пользователя">
+
+
+          <div class="voting-wjt__counter js-karma-mark voting-wjt__counter_positive " title="36 голосов">
+            <div class="voting-wjt__label">карма</div>
+            <div class="voting-wjt__counter-score js-karma_num">2,0</div>
+          </div>
+
+        </div>
+
+        <div class="user-rating" title="Рейтинг пользователя">
+          <span class="user-rating__label">рейтинг</span>
+          <span class="user-rating__value">0,0</span>
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+
+        </div>
+
+          <div class="html_banner_wrap">
+    <!--  AdRiver code START. Type:AjaxJS Site: habrahabr PZ: 0 BN: 13 -->
+    <div class="html_banner" id="adriver_banner_1109509440">
+      <span class="html_banner_text">Реклама помогает поддерживать и&nbsp;развивать наши сервисы<br/><br/><a href="/adblock/" class="xyz_wrapper_button" target="_blank">Подробнее</a></span>
+      <img src="//habracdn.net/habr/images/1468852450/spacer.png" class="html_banner_spacer"/>
+    </div>
+    <a href="https://special.habrahabr.ru/advertising/" class="firskill__label">Реклама</a>
+
+    <script type="text/javascript">
+      function show_inner_banner_block300(name, url){
+        if( typeof(name) !== 'undefined'){
+          if ($('.tabs').length && $('.tabs').width() >= 620) { // блок расчитан на >= 620 пикселей
+            $('#adriver_banner_1109509440').html('<iframe src="https://special.habrahabr.ru/api/htmlblock/'+name+'/?iframe&url='+encodeURIComponent(url)+'" width="100%" height="240"></iframe>')
+          }
+        }
+      }
+
+      var loadAdriverBanner = function(){
+        var keyword = '';
+        var custom = [];
+        custom[7] = ar_duo1;
+
+        if (typeof crtg_content !== 'undefined' && crtg_content) { keyword = crtg_content; }
+         custom[1] = 'h_openstreetmap';  custom[2] = 'f_develop'; 
+
+        return new adriver("adriver_banner_1109509440", {sid:176776, bt:52, bn:13, custom: custom, keyword: keyword})
+      }
+
+      var checkScrollPosition = function(){
+        var htmlBlock = $('#adriver_banner_1109509440');
+            scrollTop = $(window).scrollTop(),
+            scrollBottom = $(window).scrollTop() + $(window).height(),
+            blockTopPosition = htmlBlock.parent().offset().top,
+            adBannerHeight = htmlBlock.height();
+
+        if (scrollBottom > blockTopPosition){
+          loadAdriverBanner()
+          $(window).off('scroll', checkScrollPosition);
+        }
+      };
+
+      $(function(){
+        $(window).on('scroll', checkScrollPosition);
+        $(window).on('ready', checkScrollPosition);
+      });
+    </script>
+  </div>
+
+        
+
+  <div class="similar-posts similar-posts_full">
+    <h2 class="similar-posts__title_wrap">
+      <span class="similar-posts__title">Самое читаемое</span>
+      <span class="similar-posts__flow">Разработка</span>
+    </h2>
+    <div class="live-broadcast__tabs tabs" id="broadcast_tabs_posts">
+
+      <ul class="tabs__menu tabs__menu_posts menu menu_inline">
+        <li class="menu__item"><a href="#broadcast_posts_now" class="menu__item-tab">Сейчас</a></li>
+        <li class="menu__item"><a href="#broadcast_posts_today" class="menu__item-tab">Сутки</a></li>
+        <li class="menu__item"><a href="#broadcast_posts_week" class="menu__item-tab">Неделя</a></li>
+        <li class="menu__item"><a href="#broadcast_posts_month" class="menu__item-tab">Месяц</a></li>
+      </ul>
+
+        <div class="tabs__content tabs__content_reading" id="broadcast_posts_now">
+            <ul class="content-list content-list_posts content-list_most-reading">
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+18</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/post/305926/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">Как думать на SQL?</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">10,5k</span>
+                        <span class="inline-list__item favorites-count">171</span>
+                        <span class="inline-list__item comments-count">40</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+7</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/company/hpe/blog/305944/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">Сказ про мужика, или как поменять пыльные «аглицкие» кодеры чипсетные</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">1,7k</span>
+                        <span class="inline-list__item favorites-count">4</span>
+                        <span class="inline-list__item comments-count">0</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+5</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/company/1cloud/blog/305908/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">«Ближе к народу»: Нужно ли руководителю разбираться в программировании</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">3,6k</span>
+                        <span class="inline-list__item favorites-count">26</span>
+                        <span class="inline-list__item comments-count">8</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+38</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/post/305900/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">ES6 по-человечески</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">11,8k</span>
+                        <span class="inline-list__item favorites-count">261</span>
+                        <span class="inline-list__item comments-count">36</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+6</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/company/pc-administrator/blog/305878/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">Как выбрать сервер для 1С, SQL и терминалов</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">4,9k</span>
+                        <span class="inline-list__item favorites-count">50</span>
+                        <span class="inline-list__item comments-count">24</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+            </ul>
+        </div>
+        <div class="tabs__content tabs__content_reading" id="broadcast_posts_today">
+            <ul class="content-list content-list_posts content-list_most-reading">
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+50</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/post/305894/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">JIT-компилятор оптимизирует не круто, а очень круто</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">17,4k</span>
+                        <span class="inline-list__item favorites-count">70</span>
+                        <span class="inline-list__item comments-count">45</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+51</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/post/305832/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">После года использования NodeJS для разработки</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">23,1k</span>
+                        <span class="inline-list__item favorites-count">111</span>
+                        <span class="inline-list__item comments-count">130</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+38</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/post/305900/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">ES6 по-человечески</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">11,8k</span>
+                        <span class="inline-list__item favorites-count">261</span>
+                        <span class="inline-list__item comments-count">36</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+71</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/post/305782/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">Пасхалка в Mr Robot S02E01</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">61,3k</span>
+                        <span class="inline-list__item favorites-count">128</span>
+                        <span class="inline-list__item comments-count">108</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+18</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/post/305926/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">Как думать на SQL?</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">10,5k</span>
+                        <span class="inline-list__item favorites-count">171</span>
+                        <span class="inline-list__item comments-count">40</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+            </ul>
+        </div>
+        <div class="tabs__content tabs__content_reading" id="broadcast_posts_week">
+            <ul class="content-list content-list_posts content-list_most-reading">
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+71</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/post/305782/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">Пасхалка в Mr Robot S02E01</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">61,3k</span>
+                        <span class="inline-list__item favorites-count">128</span>
+                        <span class="inline-list__item comments-count">108</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+80</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/company/yandex/blog/304510/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">Последние новости о развитии C++</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">38,6k</span>
+                        <span class="inline-list__item favorites-count">179</span>
+                        <span class="inline-list__item comments-count">352</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+21</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/post/305550/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">TP-LINK потеряла права на домен, использующийся для настройки роутеров и усилителей</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">34,4k</span>
+                        <span class="inline-list__item favorites-count">27</span>
+                        <span class="inline-list__item comments-count">34</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+27</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/company/rootwelt/blog/305634/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">Кровеносная система мирового интернета</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">30,2k</span>
+                        <span class="inline-list__item favorites-count">105</span>
+                        <span class="inline-list__item comments-count">27</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+44</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/post/305536/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">Код Rust включен в Firefox 48</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">24,6k</span>
+                        <span class="inline-list__item favorites-count">41</span>
+                        <span class="inline-list__item comments-count">74</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+            </ul>
+        </div>
+        <div class="tabs__content tabs__content_reading" id="broadcast_posts_month">
+            <ul class="content-list content-list_posts content-list_most-reading">
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+145</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/post/303736/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">Теперь ваш HTTPS будет прослушиваться, а сертификат для MitM вы должны поставить сами</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">132k</span>
+                        <span class="inline-list__item favorites-count">172</span>
+                        <span class="inline-list__item comments-count">591</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+27</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/post/303896/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">Как стать профессиональным веб-разработчиком: практическое руководство</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">84,3k</span>
+                        <span class="inline-list__item favorites-count">1051</span>
+                        <span class="inline-list__item comments-count">121</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+45</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/post/304812/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">Oracle прекратила разработку Java EE?</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">76,3k</span>
+                        <span class="inline-list__item favorites-count">76</span>
+                        <span class="inline-list__item comments-count">156</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+55</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/company/reactos/blog/303618/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">Первый подтвержденный случай реального использования ReactOS</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">73k</span>
+                        <span class="inline-list__item favorites-count">60</span>
+                        <span class="inline-list__item comments-count">233</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+                <li class="content-list__item">
+                  <div class="post-preview">
+                    <div class="post-preview__rating">+48</div>
+                    <div class="post-preview__desc">
+                      <a href="https://habrahabr.ru/company/1cloud/blog/304694/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'post'); }" class="post-preview__link">«Молчание – золото»: 13 вещей, которые не стоит говорить разработчикам и тестировщикам</a>
+                      <span class="post-preview__attrs inline-list inline-list_attrs">
+                        <span class="inline-list__item views-count">69,5k</span>
+                        <span class="inline-list__item favorites-count">266</span>
+                        <span class="inline-list__item comments-count">42</span>
+                      </span>
+                    </div>
+                  </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <div class="column-wrapper column-wrapper_comments">
+    <div class="content_left">
+          <div class="comments_list " id="comments">
+    <h2 class="title ">
+      Комментарии (<span id="comments_count">12</span>)
+      
+    </h2>
+
+    
+
+    
+
+    <ul id="comments-list">
+      
+  <li class="comment_item" id="comment_8656833" >
+    
+    <span class="parent_id" data-parent_id="0"></span>
+
+    <div class="comment_body ">
+        <div class="info comments-list__item comment-item  " rel="8656833">
+
+          <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+
+          <span class="comment-item__user-info"  data-user-login="Zverik">
+            <a href="https://habrahabr.ru/users/Zverik/" class="comment-item__avatar">
+                <img src="//habrastorage.org/getpro/habr/avatars/389/38a/58e/38938a58e34507ac53938e1976f6ccc6_small.jpg" alt="" class="comment-item__avatar-img"/>
+            </a>
+            <a href="https://habrahabr.ru/users/Zverik/" class="comment-item__username">Zverik</a>
+          </span>
+
+          <time class="comment-item__time_published">
+            17 ноября 2015 в 18:30
+          </time>
+
+          <span class="comment-item__controls">
+            <a href="#comment_8656833" class="icon_comment-anchor" title="Ссылка на комментарий"></a>
+
+
+            <span class="js-comment_chidren" title="Вернуться к ответу"></span>
+          </span>
+
+            <div id="voting_8656833" class="voting-wjt voting-wjt_comments js-voting   ">
+
+              <div class="voting-wjt__counter js-mark voting-wjt__counter_positive ">
+                <span class="voting-wjt__counter-score js-score" title="Всего 8: &uarr;6 и &darr;2">+4</span>
+              </div>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_plus js-plus" title="Голосовать могут только зарегистрированные пользователи"><span>&uarr;</span></button>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_minus js-minus" title="Голосовать могут только зарегистрированные пользователи"><span>&darr;</span></button>
+            </div>
+        </div>
+
+        <div class="message html_format ">
+          (shameless plug)<br/>
+На этих выходных будет <a href="http://gisconf.ru/">конференция «Открытые ГИС 2015»</a>, где треть докладов — про OSM. Я там час проведу в консультационной, где, если будут интересующиеся, покажу, как всё это получать без программирования. Ключевые слова — osmfilter и/или overpass.<br/>
+<br/>
+В целом, спасибо за ликбез, хотя если есть моно, то есть и питон, а на нём скрипты чуть лучше читаются.
+        </div>
+
+        <div class="reply_form_placeholder"></div>
+
+        <div class="reply">
+
+        </div>
+    </div>
+
+    <ul class="reply_comments" id="reply_comments_8656833">
+      
+  <li class="comment_item" id="comment_8657601" >
+    
+    <span class="parent_id" data-parent_id="8656833"></span>
+
+    <div class="comment_body ">
+        <div class="info comments-list__item comment-item  " rel="8657601">
+
+          <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+
+          <span class="comment-item__user-info"  data-user-login="ikashnitsky">
+            <a href="https://habrahabr.ru/users/ikashnitsky/" class="comment-item__avatar">
+                <img src="//habrastorage.org/getpro/habr/avatars/8fa/886/23b/8fa88623bd3d08816ba5fc65e0bc6b2e_small.jpg" alt="" class="comment-item__avatar-img"/>
+            </a>
+            <a href="https://habrahabr.ru/users/ikashnitsky/" class="comment-item__username">ikashnitsky</a>
+          </span>
+
+          <time class="comment-item__time_published">
+            18 ноября 2015 в 15:24
+          </time>
+
+          <span class="comment-item__controls">
+            <a href="#comment_8657601" class="icon_comment-anchor" title="Ссылка на комментарий"></a>
+
+
+              <span class="icon_comment-tree js-comment_tree" data-id="8657601" data-parent_id="8656833" title="Показать ветку комментариев"></span>
+              <a href="#comment_8656833" class="icon_comment-parent js-comment_parent" data-id="8657601" data-parent_id="8656833" title="Показать предыдущий комментарий"></a>
+            <span class="js-comment_chidren" title="Вернуться к ответу"></span>
+          </span>
+
+            <div id="voting_8657601" class="voting-wjt voting-wjt_comments js-voting   ">
+
+              <div class="voting-wjt__counter js-mark voting-wjt__counter_positive ">
+                <span class="voting-wjt__counter-score js-score" title="Всего 2: &uarr;2 и &darr;0">+2</span>
+              </div>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_plus js-plus" title="Голосовать могут только зарегистрированные пользователи"><span>&uarr;</span></button>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_minus js-minus" title="Голосовать могут только зарегистрированные пользователи"><span>&darr;</span></button>
+            </div>
+        </div>
+
+        <div class="message html_format ">
+          А еще есть R, который неплохо приспособлен для анализа данных и даже для простого картографирования
+        </div>
+
+        <div class="reply_form_placeholder"></div>
+
+        <div class="reply">
+
+        </div>
+    </div>
+
+    <ul class="reply_comments" id="reply_comments_8657601">
+      
+      
+    </ul>
+
+  </li>
+
+      
+    </ul>
+
+  </li>
+
+  <li class="comment_item" id="comment_8656901" >
+    
+    <span class="parent_id" data-parent_id="0"></span>
+
+    <div class="comment_body ">
+        <div class="info comments-list__item comment-item  " rel="8656901">
+
+          <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+
+          <span class="comment-item__user-info"  data-user-login="olen">
+            <a href="https://habrahabr.ru/users/olen/" class="comment-item__avatar">
+                <img src="//habrastorage.org/getpro/habr/avatars/e84/287/752/e84287752d20fd47d90ec620b86ed12b_small.jpg" alt="" class="comment-item__avatar-img"/>
+            </a>
+            <a href="https://habrahabr.ru/users/olen/" class="comment-item__username">olen</a>
+          </span>
+
+          <time class="comment-item__time_published">
+            17 ноября 2015 в 19:58
+          </time>
+
+          <span class="comment-item__controls">
+            <a href="#comment_8656901" class="icon_comment-anchor" title="Ссылка на комментарий"></a>
+
+
+            <span class="js-comment_chidren" title="Вернуться к ответу"></span>
+          </span>
+
+            <div id="voting_8656901" class="voting-wjt voting-wjt_comments js-voting   ">
+
+              <div class="voting-wjt__counter js-mark  ">
+                <span class="voting-wjt__counter-score js-score" title="Всего 0: &uarr;0 и &darr;0">0</span>
+              </div>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_plus js-plus" title="Голосовать могут только зарегистрированные пользователи"><span>&uarr;</span></button>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_minus js-minus" title="Голосовать могут только зарегистрированные пользователи"><span>&darr;</span></button>
+            </div>
+        </div>
+
+        <div class="message html_format ">
+          &gt; Все государства на Земле.<br/>
+<br/>
+По вашей ссылке совершенно случайно нашел баг:<br/>
+<br/>
+«properties»:{«Type»:«country»,«Name»:«Biblioteca Civica di Cividale del Friuli»,«Name(en)»:«No data»,«Name(ru)»:«No data»,«Population»:0}<br/>
+<br/>
+
+        </div>
+
+        <div class="reply_form_placeholder"></div>
+
+        <div class="reply">
+
+        </div>
+    </div>
+
+    <ul class="reply_comments" id="reply_comments_8656901">
+      
+  <li class="comment_item" id="comment_8656937" >
+    
+    <span class="parent_id" data-parent_id="8656901"></span>
+
+    <div class="comment_body ">
+        <div class="info comments-list__item comment-item  " rel="8656937">
+
+          <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+
+          <span class="comment-item__user-info"  data-user-login="freeExec">
+            <a href="https://habrahabr.ru/users/freeExec/" class="comment-item__avatar">
+                <img src="//habrastorage.org/getpro/habr/avatars/123/41d/ff4/12341dff4ba54555688bebc613d7a4eb_small.png" alt="" class="comment-item__avatar-img"/>
+            </a>
+            <a href="https://habrahabr.ru/users/freeExec/" class="comment-item__username">freeExec</a>
+          </span>
+
+          <time class="comment-item__time_published">
+            17 ноября 2015 в 21:07
+              <span class="comment-item__time_changed icon_comment-edit" title="Kомментарий был изменён">
+                <i class="comment-item__sign_changed">(комментарий был изменён)</i>
+              </span>
+          </time>
+
+          <span class="comment-item__controls">
+            <a href="#comment_8656937" class="icon_comment-anchor" title="Ссылка на комментарий"></a>
+
+
+              <span class="icon_comment-tree js-comment_tree" data-id="8656937" data-parent_id="8656901" title="Показать ветку комментариев"></span>
+              <a href="#comment_8656901" class="icon_comment-parent js-comment_parent" data-id="8656937" data-parent_id="8656901" title="Показать предыдущий комментарий"></a>
+            <span class="js-comment_chidren" title="Вернуться к ответу"></span>
+          </span>
+
+            <div id="voting_8656937" class="voting-wjt voting-wjt_comments js-voting   ">
+
+              <div class="voting-wjt__counter js-mark  ">
+                <span class="voting-wjt__counter-score js-score" title="Всего 0: &uarr;0 и &darr;0">0</span>
+              </div>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_plus js-plus" title="Голосовать могут только зарегистрированные пользователи"><span>&uarr;</span></button>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_minus js-minus" title="Голосовать могут только зарегистрированные пользователи"><span>&darr;</span></button>
+            </div>
+        </div>
+
+        <div class="message html_format ">
+          Угу, ведь это обычная библиотека<br/>
+<blockquote>node 1706381831: 46.0910836, 13.4324346<br/>
+ addr:country = IT<br/>
+ amenity = library<br/>
+ name = Biblioteca Civica di Cividale del Friuli<br/>
+ opening_hours = Mo-Fr 14:30-19:00; Tu,Th 10:30-12:30; PH off<br/>
+ phone = +39 0432 710310<br/>
+ ref:isil = IT-UD0016<br/>
+</blockquote><br/>
+Сколько там ещё дубликатов с addr:country одному ОСМ известно.
+        </div>
+
+        <div class="reply_form_placeholder"></div>
+
+        <div class="reply">
+
+        </div>
+    </div>
+
+    <ul class="reply_comments" id="reply_comments_8656937">
+      
+  <li class="comment_item" id="comment_8657015" >
+    
+    <span class="parent_id" data-parent_id="8656937"></span>
+
+    <div class="comment_body ">
+        <div class="info comments-list__item comment-item  " rel="8657015">
+
+          <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+
+          <span class="comment-item__user-info"  data-user-login="Zverik">
+            <a href="https://habrahabr.ru/users/Zverik/" class="comment-item__avatar">
+                <img src="//habrastorage.org/getpro/habr/avatars/389/38a/58e/38938a58e34507ac53938e1976f6ccc6_small.jpg" alt="" class="comment-item__avatar-img"/>
+            </a>
+            <a href="https://habrahabr.ru/users/Zverik/" class="comment-item__username">Zverik</a>
+          </span>
+
+          <time class="comment-item__time_published">
+            17 ноября 2015 в 22:49
+              <span class="comment-item__time_changed icon_comment-edit" title="Kомментарий был изменён">
+                <i class="comment-item__sign_changed">(комментарий был изменён)</i>
+              </span>
+          </time>
+
+          <span class="comment-item__controls">
+            <a href="#comment_8657015" class="icon_comment-anchor" title="Ссылка на комментарий"></a>
+
+
+              <span class="icon_comment-tree js-comment_tree" data-id="8657015" data-parent_id="8656937" title="Показать ветку комментариев"></span>
+              <a href="#comment_8656937" class="icon_comment-parent js-comment_parent" data-id="8657015" data-parent_id="8656937" title="Показать предыдущий комментарий"></a>
+            <span class="js-comment_chidren" title="Вернуться к ответу"></span>
+          </span>
+
+            <div id="voting_8657015" class="voting-wjt voting-wjt_comments js-voting   ">
+
+              <div class="voting-wjt__counter js-mark  ">
+                <span class="voting-wjt__counter-score js-score" title="Всего 0: &uarr;0 и &darr;0">0</span>
+              </div>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_plus js-plus" title="Голосовать могут только зарегистрированные пользователи"><span>&uarr;</span></button>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_minus js-minus" title="Голосовать могут только зарегистрированные пользователи"><span>&darr;</span></button>
+            </div>
+        </div>
+
+        <div class="message html_format ">
+          А что плохого в addr:country? Это ж просто часть адреса.<br/>
+<br/>
+Тег ref:isil (islamic state of iraq and levant?) более подозрителен.
+        </div>
+
+        <div class="reply_form_placeholder"></div>
+
+        <div class="reply">
+
+        </div>
+    </div>
+
+    <ul class="reply_comments" id="reply_comments_8657015">
+      
+  <li class="comment_item" id="comment_8657071" >
+    
+    <span class="parent_id" data-parent_id="8657015"></span>
+
+    <div class="comment_body ">
+        <div class="info comments-list__item comment-item  " rel="8657071">
+
+          <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+
+          <span class="comment-item__user-info"  data-user-login="freeExec">
+            <a href="https://habrahabr.ru/users/freeExec/" class="comment-item__avatar">
+                <img src="//habrastorage.org/getpro/habr/avatars/123/41d/ff4/12341dff4ba54555688bebc613d7a4eb_small.png" alt="" class="comment-item__avatar-img"/>
+            </a>
+            <a href="https://habrahabr.ru/users/freeExec/" class="comment-item__username">freeExec</a>
+          </span>
+
+          <time class="comment-item__time_published">
+            18 ноября 2015 в 01:48
+          </time>
+
+          <span class="comment-item__controls">
+            <a href="#comment_8657071" class="icon_comment-anchor" title="Ссылка на комментарий"></a>
+
+
+              <span class="icon_comment-tree js-comment_tree" data-id="8657071" data-parent_id="8657015" title="Показать ветку комментариев"></span>
+              <a href="#comment_8657015" class="icon_comment-parent js-comment_parent" data-id="8657071" data-parent_id="8657015" title="Показать предыдущий комментарий"></a>
+            <span class="js-comment_chidren" title="Вернуться к ответу"></span>
+          </span>
+
+            <div id="voting_8657071" class="voting-wjt voting-wjt_comments js-voting   ">
+
+              <div class="voting-wjt__counter js-mark  ">
+                <span class="voting-wjt__counter-score js-score" title="Всего 0: &uarr;0 и &darr;0">0</span>
+              </div>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_plus js-plus" title="Голосовать могут только зарегистрированные пользователи"><span>&uarr;</span></button>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_minus js-minus" title="Голосовать могут только зарегистрированные пользователи"><span>&darr;</span></button>
+            </div>
+        </div>
+
+        <div class="message html_format ">
+          В теге нечего. Плохо что-то у автора в разборе тегов, раз у него эта библиотека идёт наравне с государствами Мира.
+        </div>
+
+        <div class="reply_form_placeholder"></div>
+
+        <div class="reply">
+
+        </div>
+    </div>
+
+    <ul class="reply_comments" id="reply_comments_8657071">
+      
+  <li class="comment_item" id="comment_8657383" >
+    
+    <span class="parent_id" data-parent_id="8657071"></span>
+
+    <div class="comment_body ">
+        <div class="info comments-list__item comment-item is_topic_starter " rel="8657383">
+
+          <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+
+          <span class="comment-item__user-info"  data-user-login="apelserg">
+            <a href="https://habrahabr.ru/users/apelserg/" class="comment-item__avatar">
+                <span class="comment-item__avatar-img_default user-pic_blue"></span>
+            </a>
+            <a href="https://habrahabr.ru/users/apelserg/" class="comment-item__username">apelserg</a>
+          </span>
+
+          <time class="comment-item__time_published">
+            18 ноября 2015 в 12:48
+          </time>
+
+          <span class="comment-item__controls">
+            <a href="#comment_8657383" class="icon_comment-anchor" title="Ссылка на комментарий"></a>
+
+
+              <span class="icon_comment-tree js-comment_tree" data-id="8657383" data-parent_id="8657071" title="Показать ветку комментариев"></span>
+              <a href="#comment_8657071" class="icon_comment-parent js-comment_parent" data-id="8657383" data-parent_id="8657071" title="Показать предыдущий комментарий"></a>
+            <span class="js-comment_chidren" title="Вернуться к ответу"></span>
+          </span>
+
+            <div id="voting_8657383" class="voting-wjt voting-wjt_comments js-voting   ">
+
+              <div class="voting-wjt__counter js-mark  ">
+                <span class="voting-wjt__counter-score js-score" title="Всего 0: &uarr;0 и &darr;0">0</span>
+              </div>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_plus js-plus" title="Голосовать могут только зарегистрированные пользователи"><span>&uarr;</span></button>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_minus js-minus" title="Голосовать могут только зарегистрированные пользователи"><span>&darr;</span></button>
+            </div>
+        </div>
+
+        <div class="message html_format ">
+          <blockquote>Плохо что-то у автора в разборе тегов<br/>
+</blockquote><br/>
+Это полный список KV тегов по точке id=1706381831 (lat=46.0910836, lon=13.4324346):<br/>
+ «addr:country»:«IT»<br/>
+ «amenity»:«library»<br/>
+ «name»:«Biblioteca Civica di Cividale del Friuli»<br/>
+ «opening_hours»:«Mo-Fr 14:30-19:00; Tu,Th 10:30-12:30; PH off»<br/>
+ «phone»:&quot;+39 0432 710310&quot;<br/>
+ «place»:«country»<br/>
+ «ref:isil»:«IT-UD0016»<br/>
+<br/>
+Ошибку вызвала KV пара: <a href="http://wiki.openstreetmap.org/wiki/Tag:place%3Dcountry">Tag:place=country</a>, так как она является критерием отбора. По-моему это полезный и наглядный пример «небольших» недоразумений, которые могут возникать при использовании OSM.<br/>
+<br/>
+В том, что это действительно библиотека — <a href="http://www.openstreetmap.org/#map=19/46.0910836/13.4324346">легко убедится</a><br/>
+
+        </div>
+
+        <div class="reply_form_placeholder"></div>
+
+        <div class="reply">
+
+        </div>
+    </div>
+
+    <ul class="reply_comments" id="reply_comments_8657383">
+      
+  <li class="comment_item" id="comment_8657403" >
+    
+    <span class="parent_id" data-parent_id="8657383"></span>
+
+    <div class="comment_body ">
+        <div class="info comments-list__item comment-item  " rel="8657403">
+
+          <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+
+          <span class="comment-item__user-info"  data-user-login="freeExec">
+            <a href="https://habrahabr.ru/users/freeExec/" class="comment-item__avatar">
+                <img src="//habrastorage.org/getpro/habr/avatars/123/41d/ff4/12341dff4ba54555688bebc613d7a4eb_small.png" alt="" class="comment-item__avatar-img"/>
+            </a>
+            <a href="https://habrahabr.ru/users/freeExec/" class="comment-item__username">freeExec</a>
+          </span>
+
+          <time class="comment-item__time_published">
+            18 ноября 2015 в 12:59
+          </time>
+
+          <span class="comment-item__controls">
+            <a href="#comment_8657403" class="icon_comment-anchor" title="Ссылка на комментарий"></a>
+
+
+              <span class="icon_comment-tree js-comment_tree" data-id="8657403" data-parent_id="8657383" title="Показать ветку комментариев"></span>
+              <a href="#comment_8657383" class="icon_comment-parent js-comment_parent" data-id="8657403" data-parent_id="8657383" title="Показать предыдущий комментарий"></a>
+            <span class="js-comment_chidren" title="Вернуться к ответу"></span>
+          </span>
+
+            <div id="voting_8657403" class="voting-wjt voting-wjt_comments js-voting   ">
+
+              <div class="voting-wjt__counter js-mark  ">
+                <span class="voting-wjt__counter-score js-score" title="Всего 0: &uarr;0 и &darr;0">0</span>
+              </div>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_plus js-plus" title="Голосовать могут только зарегистрированные пользователи"><span>&uarr;</span></button>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_minus js-minus" title="Голосовать могут только зарегистрированные пользователи"><span>&darr;</span></button>
+            </div>
+        </div>
+
+        <div class="message html_format ">
+          А, это у Вас просто старый дамп, 2 месяца назад этот ошибочный тег удалён.
+        </div>
+
+        <div class="reply_form_placeholder"></div>
+
+        <div class="reply">
+
+        </div>
+    </div>
+
+    <ul class="reply_comments" id="reply_comments_8657403">
+      
+      
+    </ul>
+
+  </li>
+
+  <li class="comment_item" id="comment_8657605" >
+    
+    <span class="parent_id" data-parent_id="8657383"></span>
+
+    <div class="comment_body ">
+        <div class="info comments-list__item comment-item  " rel="8657605">
+
+          <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+
+          <span class="comment-item__user-info"  data-user-login="Zverik">
+            <a href="https://habrahabr.ru/users/Zverik/" class="comment-item__avatar">
+                <img src="//habrastorage.org/getpro/habr/avatars/389/38a/58e/38938a58e34507ac53938e1976f6ccc6_small.jpg" alt="" class="comment-item__avatar-img"/>
+            </a>
+            <a href="https://habrahabr.ru/users/Zverik/" class="comment-item__username">Zverik</a>
+          </span>
+
+          <time class="comment-item__time_published">
+            18 ноября 2015 в 15:29
+          </time>
+
+          <span class="comment-item__controls">
+            <a href="#comment_8657605" class="icon_comment-anchor" title="Ссылка на комментарий"></a>
+
+
+              <span class="icon_comment-tree js-comment_tree" data-id="8657605" data-parent_id="8657383" title="Показать ветку комментариев"></span>
+              <a href="#comment_8657383" class="icon_comment-parent js-comment_parent" data-id="8657605" data-parent_id="8657383" title="Показать предыдущий комментарий"></a>
+            <span class="js-comment_chidren" title="Вернуться к ответу"></span>
+          </span>
+
+            <div id="voting_8657605" class="voting-wjt voting-wjt_comments js-voting   ">
+
+              <div class="voting-wjt__counter js-mark  ">
+                <span class="voting-wjt__counter-score js-score" title="Всего 0: &uarr;0 и &darr;0">0</span>
+              </div>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_plus js-plus" title="Голосовать могут только зарегистрированные пользователи"><span>&uarr;</span></button>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_minus js-minus" title="Голосовать могут только зарегистрированные пользователи"><span>&darr;</span></button>
+            </div>
+        </div>
+
+        <div class="message html_format ">
+          Страны лучше брать из отношений boundary=administrative + admin_level=2. Точки place=country могли добавить не для каждой страны.
+        </div>
+
+        <div class="reply_form_placeholder"></div>
+
+        <div class="reply">
+
+        </div>
+    </div>
+
+    <ul class="reply_comments" id="reply_comments_8657605">
+      
+      
+    </ul>
+
+  </li>
+
+      
+    </ul>
+
+  </li>
+
+      
+    </ul>
+
+  </li>
+
+  <li class="comment_item" id="comment_8657377" >
+    
+    <span class="parent_id" data-parent_id="8657015"></span>
+
+    <div class="comment_body ">
+        <div class="info comments-list__item comment-item is_topic_starter " rel="8657377">
+
+          <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+
+          <span class="comment-item__user-info"  data-user-login="apelserg">
+            <a href="https://habrahabr.ru/users/apelserg/" class="comment-item__avatar">
+                <span class="comment-item__avatar-img_default user-pic_blue"></span>
+            </a>
+            <a href="https://habrahabr.ru/users/apelserg/" class="comment-item__username">apelserg</a>
+          </span>
+
+          <time class="comment-item__time_published">
+            18 ноября 2015 в 12:40
+              <span class="comment-item__time_changed icon_comment-edit" title="Kомментарий был изменён">
+                <i class="comment-item__sign_changed">(комментарий был изменён)</i>
+              </span>
+          </time>
+
+          <span class="comment-item__controls">
+            <a href="#comment_8657377" class="icon_comment-anchor" title="Ссылка на комментарий"></a>
+
+
+              <span class="icon_comment-tree js-comment_tree" data-id="8657377" data-parent_id="8657015" title="Показать ветку комментариев"></span>
+              <a href="#comment_8657015" class="icon_comment-parent js-comment_parent" data-id="8657377" data-parent_id="8657015" title="Показать предыдущий комментарий"></a>
+            <span class="js-comment_chidren" title="Вернуться к ответу"></span>
+          </span>
+
+            <div id="voting_8657377" class="voting-wjt voting-wjt_comments js-voting   ">
+
+              <div class="voting-wjt__counter js-mark  ">
+                <span class="voting-wjt__counter-score js-score" title="Всего 0: &uarr;0 и &darr;0">0</span>
+              </div>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_plus js-plus" title="Голосовать могут только зарегистрированные пользователи"><span>&uarr;</span></button>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_minus js-minus" title="Голосовать могут только зарегистрированные пользователи"><span>&darr;</span></button>
+            </div>
+        </div>
+
+        <div class="message html_format ">
+          <blockquote>Тег ref:isil (islamic state of iraq and levant?) более подозрителен.<br/>
+</blockquote><br/>
+Ничего подозрительного — стандартный тег: <a href="http://wiki.openstreetmap.org/wiki/Key:ref:isil">Key:ref:isil</a>
+        </div>
+
+        <div class="reply_form_placeholder"></div>
+
+        <div class="reply">
+
+        </div>
+    </div>
+
+    <ul class="reply_comments" id="reply_comments_8657377">
+      
+      
+    </ul>
+
+  </li>
+
+      
+    </ul>
+
+  </li>
+
+      
+    </ul>
+
+  </li>
+
+      
+    </ul>
+
+  </li>
+
+  <li class="comment_item" id="comment_8656915" >
+    
+    <span class="parent_id" data-parent_id="0"></span>
+
+    <div class="comment_body ">
+        <div class="info comments-list__item comment-item  " rel="8656915">
+
+          <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+
+          <span class="comment-item__user-info"  data-user-login="kivsiak">
+            <a href="https://habrahabr.ru/users/kivsiak/" class="comment-item__avatar">
+                <img src="//habrastorage.org/getpro/habr/avatars/6c9/70f/a2e/6c970fa2e7fa03ffb45d344b2b6c94ad_small.jpg" alt="" class="comment-item__avatar-img"/>
+            </a>
+            <a href="https://habrahabr.ru/users/kivsiak/" class="comment-item__username">kivsiak</a>
+          </span>
+
+          <time class="comment-item__time_published">
+            17 ноября 2015 в 20:39
+          </time>
+
+          <span class="comment-item__controls">
+            <a href="#comment_8656915" class="icon_comment-anchor" title="Ссылка на комментарий"></a>
+
+
+            <span class="js-comment_chidren" title="Вернуться к ответу"></span>
+          </span>
+
+            <div id="voting_8656915" class="voting-wjt voting-wjt_comments js-voting   ">
+
+              <div class="voting-wjt__counter js-mark voting-wjt__counter_positive ">
+                <span class="voting-wjt__counter-score js-score" title="Всего 1: &uarr;1 и &darr;0">+1</span>
+              </div>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_plus js-plus" title="Голосовать могут только зарегистрированные пользователи"><span>&uarr;</span></button>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_minus js-minus" title="Голосовать могут только зарегистрированные пользователи"><span>&darr;</span></button>
+            </div>
+        </div>
+
+        <div class="message html_format ">
+          Пара не больших комментариев. <br/>
+Не смотря на то что xml очень наглядно дает понятие о структуре osm, и вполне уместен в статье, использовать его в реальной жизни не стоит. Pbf — на много эффективнее как по размерам так и по скорости доступа. <br/>
+<br/>
+Работать с аналитикой лучше используя postgis — расширение postgresql для поддержки геопространственных данных на базе GDAL. <a href="http://wiki.openstreetmap.org/wiki/Osm2pgsql">wiki.openstreetmap.org/wiki/Osm2pgsql</a> — позволит перегнать выгрузку в базу (весьма на быстрый, но одноразовый процесс) И там вам будет доступна вся мощь posgresql без проблем с весьма тяжелым (617GB — это мир на текущий момент) xml. <br/>
+<br/>
+
+        </div>
+
+        <div class="reply_form_placeholder"></div>
+
+        <div class="reply">
+
+        </div>
+    </div>
+
+    <ul class="reply_comments" id="reply_comments_8656915">
+      
+  <li class="comment_item" id="comment_8657017" >
+    
+    <span class="parent_id" data-parent_id="8656915"></span>
+
+    <div class="comment_body ">
+        <div class="info comments-list__item comment-item  " rel="8657017">
+
+          <div class="folding-dot-holder"><div class="folding-dot"></div></div>
+
+          <span class="comment-item__user-info"  data-user-login="Zverik">
+            <a href="https://habrahabr.ru/users/Zverik/" class="comment-item__avatar">
+                <img src="//habrastorage.org/getpro/habr/avatars/389/38a/58e/38938a58e34507ac53938e1976f6ccc6_small.jpg" alt="" class="comment-item__avatar-img"/>
+            </a>
+            <a href="https://habrahabr.ru/users/Zverik/" class="comment-item__username">Zverik</a>
+          </span>
+
+          <time class="comment-item__time_published">
+            17 ноября 2015 в 22:51
+          </time>
+
+          <span class="comment-item__controls">
+            <a href="#comment_8657017" class="icon_comment-anchor" title="Ссылка на комментарий"></a>
+
+
+              <span class="icon_comment-tree js-comment_tree" data-id="8657017" data-parent_id="8656915" title="Показать ветку комментариев"></span>
+              <a href="#comment_8656915" class="icon_comment-parent js-comment_parent" data-id="8657017" data-parent_id="8656915" title="Показать предыдущий комментарий"></a>
+            <span class="js-comment_chidren" title="Вернуться к ответу"></span>
+          </span>
+
+            <div id="voting_8657017" class="voting-wjt voting-wjt_comments js-voting   ">
+
+              <div class="voting-wjt__counter js-mark  ">
+                <span class="voting-wjt__counter-score js-score" title="Всего 0: &uarr;0 и &darr;0">0</span>
+              </div>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_plus js-plus" title="Голосовать могут только зарегистрированные пользователи"><span>&uarr;</span></button>
+
+                <button type="button" disabled class="voting-wjt__button voting-wjt__button_minus js-minus" title="Голосовать могут только зарегистрированные пользователи"><span>&darr;</span></button>
+            </div>
+        </div>
+
+        <div class="message html_format ">
+          PostGIS удобен, когда нужно сложные запросы прогонять. Для фильтрации по тегам или регионам достаточно консольных утилит из набора osmctools. Кроме того, данные в PostGIS требуют очень много места, а заливка — много времени. Поэтому если с данными нужно не постоянно работать, проще изучить overpass и osmctools.
+        </div>
+
+        <div class="reply_form_placeholder"></div>
+
+        <div class="reply">
+
+        </div>
+    </div>
+
+    <ul class="reply_comments" id="reply_comments_8657017">
+      
+      
+    </ul>
+
+  </li>
+
+      
+    </ul>
+
+  </li>
+
+      
+    </ul>
+
+  </div>
+
+
+                <p class="for_users_only_msg">Только зарегистрированные пользователи могут оставлять комментарии. <a href="https://habrahabr.ru/auth/login/">Войдите</a>, пожалуйста.</p>
+
+
+      
+<form action="/json/favorites/" method="post" id="edit_tags_form" class="hidden">
+  <input type="hidden" name="action" value="add" />
+  <input type="hidden" name="ti" value="0" />
+  <input type="hidden" name="tt" value="0" />
+  <label>Пометьте топик понятными вам метками, если хотите</label>
+  <input type="text" name="tags_string" class="tags_string" />
+  <div class="description">Метки лучше разделять запятой. Например: <i>общение, социальные сети, myspace.com, подростки, мердок</i></div>
+  <input type="submit" value="Сохранить" class="submit" /> или <a href="#" class="close" onclick="return close_edit_tags()">закрыть</a>
+</form>
+
+    </div>
+    <div class="sidebar_right js-sidebar_right">
+          
+
+  <div class="live-broadcast live-broadcast_habrahabr">
+    <h2 class="live-broadcast__title">Что обсуждают</h2>
+    <div class="live-broadcast__tabs tabs" id="broadcast_tabs_comments">
+      <ul class="tabs__menu tabs__menu_comments menu menu_inline">
+        <li class="menu__item"><a href="#broadcast_comments_now" class="menu__item-tab">Сейчас</a></li>
+        <li class="menu__item"><a href="#broadcast_comments_yesterday" class="menu__item-tab">Вчера</a></li>
+        <li class="menu__item"><a href="#broadcast_comments_week" class="menu__item-tab">Неделя</a></li>
+      </ul>
+
+        <div class="tabs__content" id="broadcast_comments_now">
+            <ul class="content-list content-list_comments" >
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/company/pc-administrator/blog/305878/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Как выбрать сервер для 1С, SQL и терминалов</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/company/pc-administrator/blog/305878/#comments" class="content-list__item-counter icon_comments">25</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/company/yandex/blog/304510/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Последние новости о развитии C++</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/company/yandex/blog/304510/#comments" class="content-list__item-counter icon_comments">353</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/post/305900/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">ES6 по-человечески</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/305900/#comments" class="content-list__item-counter icon_comments">36</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/post/305866/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Список полезных ресурсов по Microsoft SQL Server</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/305866/#comments" class="content-list__item-counter icon_comments">19</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/post/305832/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">После года использования NodeJS для разработки</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/305832/#comments" class="content-list__item-counter icon_comments">130</a>
+                </li>
+            </ul>
+        </div>
+        <div class="tabs__content" id="broadcast_comments_yesterday">
+            <ul class="content-list content-list_comments" >
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/post/305832/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">После года использования NodeJS для разработки</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/305832/#comments" class="content-list__item-counter icon_comments">130</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/post/305894/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">JIT-компилятор оптимизирует не круто, а очень круто</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/305894/#comments" class="content-list__item-counter icon_comments">45</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/company/devexpress/blog/305812/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Честный MVC на React + Redux</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/company/devexpress/blog/305812/#comments" class="content-list__item-counter icon_comments">43</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/post/305926/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Как думать на SQL?</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/305926/#comments" class="content-list__item-counter icon_comments">40</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/company/testutor/blog/305822/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Чему мы можем научиться у PokemonGO?</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/company/testutor/blog/305822/#comments" class="content-list__item-counter icon_comments">37</a>
+                </li>
+            </ul>
+        </div>
+        <div class="tabs__content" id="broadcast_comments_week">
+            <ul class="content-list content-list_comments" >
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/company/yandex/blog/304510/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Последние новости о развитии C++</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/company/yandex/blog/304510/#comments" class="content-list__item-counter icon_comments">352</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/company/thirdpin/blog/305594/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Пастильда — открытый аппаратный менеджер паролей</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/company/thirdpin/blog/305594/#comments" class="content-list__item-counter icon_comments">140</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/post/305832/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">После года использования NodeJS для разработки</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/305832/#comments" class="content-list__item-counter icon_comments">130</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/post/305782/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Пасхалка в Mr Robot S02E01</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/305782/#comments" class="content-list__item-counter icon_comments">108</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/company/JetBrains/blog/305688/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Выпущен PhpStorm 2016.2</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/company/JetBrains/blog/305688/#comments" class="content-list__item-counter icon_comments">100</a>
+                </li>
+            </ul>
+        </div>
+        <div class="tabs__content" id="broadcast_comments_month">
+            <ul class="content-list content-list_comments" >
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/post/303736/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Теперь ваш HTTPS будет прослушиваться, а сертификат для MitM вы должны поставить сами</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/303736/#comments" class="content-list__item-counter icon_comments">591</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/company/yandex/blog/304510/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Последние новости о развитии C++</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/company/yandex/blog/304510/#comments" class="content-list__item-counter icon_comments">352</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/post/304816/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Как изучать языки программирования</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/304816/#comments" class="content-list__item-counter icon_comments">314</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/post/303850/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Роскомнадзор заблокировал веб-сервисы Amazon S3</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/303850/#comments" class="content-list__item-counter icon_comments">262</a>
+                </li>
+                <li class="content-list__item">
+                  <a href="https://habrahabr.ru/post/303984/" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" class="content-list__item-link">Недостатки чистого функционального программирования</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/303984/#comments" class="content-list__item-counter icon_comments">256</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </div>
+
+    </div>
+  </div>
+
+  <div class="column-wrapper column-wrapper_bottom column-wrapper_bordered">
+    <div class="content_left">
+      
+
+  <div class="live-broadcast live-broadcast_feed">
+    <h2 class="live-broadcast__title live-broadcast__title_feed">Интересные публикации</h2>
+
+    <div class="dropdown dropdown_broadcast">
+      <button type="button" class="btn btn_outline_grey btn_large icon_cog dropdown-toggle" data-toggle="dropdown">
+      </button>
+      <div class="dropdown-container">
+        <ul class="n-dropdown-menu n-dropdown-menu_feed" id="filter">
+          <li class="n-dropdown-menu__item">
+            <label class="checkbox checkbox_custom">
+              <input type="checkbox" class="checkbox__input" name="habrahabr" checked/>
+              <span class="checkbox__label">Хабрахабр</span>
+            </label>
+          </li>
+          <li class="n-dropdown-menu__item">
+            <label class="checkbox checkbox_custom">
+              <input type="checkbox" class="checkbox__input" name="geektimes" checked/>
+              <span class="checkbox__label">Гиктаймс</span>
+            </label>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="live-broadcast__content">
+      <ul class="content-list content-list_feed" id="list" data-posts-count="5">
+          <li class="content-list__item content-list__item_habrahabr hidden" data-type="habrahabr">
+            <a href="https://habrahabr.ru/post/305846/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" data-utm="?utm_source=tm_megamozg&utm_medium=tm_block&utm_campaign=tm_promo">API Яндекс.Панорам: как сделать свою виртуальную прогулку или просто довести человека от метро</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/305846/#comments" class="content-list__item-counter icon_comments">1</a>
+          </li>
+          <li class="content-list__item content-list__item_habrahabr hidden" data-type="habrahabr">
+            <a href="https://habrahabr.ru/post/305952/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" data-utm="?utm_source=tm_megamozg&utm_medium=tm_block&utm_campaign=tm_promo">Юзабилити-тестирование: хотите ли вы узнать правду о своих пользователях?</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/305952/#comments" class="content-list__item-counter icon_comments">0</a>
+          </li>
+          <li class="content-list__item content-list__item_habrahabr hidden" data-type="habrahabr">
+            <a href="https://habrahabr.ru/post/305944/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" data-utm="?utm_source=tm_megamozg&utm_medium=tm_block&utm_campaign=tm_promo">Сказ про мужика, или как поменять пыльные «аглицкие» кодеры чипсетные</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/305944/#comments" class="content-list__item-counter icon_comments">0</a>
+          </li>
+          <li class="content-list__item content-list__item_habrahabr hidden" data-type="habrahabr">
+            <a href="https://habrahabr.ru/post/305888/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" data-utm="?utm_source=tm_megamozg&utm_medium=tm_block&utm_campaign=tm_promo">Agile API — возможно ли?</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/305888/#comments" class="content-list__item-counter icon_comments">0</a>
+          </li>
+          <li class="content-list__item content-list__item_habrahabr hidden" data-type="habrahabr">
+            <a href="https://habrahabr.ru/post/305680/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" data-utm="?utm_source=tm_megamozg&utm_medium=tm_block&utm_campaign=tm_promo">Использование механизма SRR в приложениях разработанных на Qt для QNX</a>&nbsp;&nbsp;<a href="https://habrahabr.ru/post/305680/#comments" class="content-list__item-counter icon_comments">0</a>
+          </li>
+          <li class="content-list__item content-list__item_geektimes hidden" data-type="geektimes">
+            <a href="https://geektimes.ru/post/278610/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" data-utm="?utm_source=tm_megamozg&utm_medium=tm_block&utm_campaign=tm_promo">Как происхождение человека отразилось в генах</a>&nbsp;&nbsp;<a href="https://geektimes.ru/post/278610/#comments" class="content-list__item-counter icon_comments">21</a>
+          </li>
+          <li class="content-list__item content-list__item_geektimes hidden" data-type="geektimes">
+            <a href="https://geektimes.ru/post/278602/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" data-utm="?utm_source=tm_megamozg&utm_medium=tm_block&utm_campaign=tm_promo">Любопытная связь между пролётной аномалией и «невозможным» двигателем EmDrive</a>&nbsp;&nbsp;<a href="https://geektimes.ru/post/278602/#comments" class="content-list__item-counter icon_comments">17</a>
+          </li>
+          <li class="content-list__item content-list__item_geektimes hidden" data-type="geektimes">
+            <a href="https://geektimes.ru/post/278600/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" data-utm="?utm_source=tm_megamozg&utm_medium=tm_block&utm_campaign=tm_promo">Спортивное собеседование</a>&nbsp;&nbsp;<a href="https://geektimes.ru/post/278600/#comments" class="content-list__item-counter icon_comments">37</a>
+          </li>
+          <li class="content-list__item content-list__item_geektimes hidden" data-type="geektimes">
+            <a href="https://geektimes.ru/post/278488/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" data-utm="?utm_source=tm_megamozg&utm_medium=tm_block&utm_campaign=tm_promo">Первое в истории изображение Марса, сделанное космическим аппаратом, было раскрашено вручную. Почему?</a>&nbsp;&nbsp;<a href="https://geektimes.ru/post/278488/#comments" class="content-list__item-counter icon_comments">20</a>
+          </li>
+          <li class="content-list__item content-list__item_geektimes hidden" data-type="geektimes">
+            <a href="https://geektimes.ru/post/278592/" class="content-list__item-link" onclick="if (typeof ga === 'function') { ga('send', 'event', 'tm_block', 'live_broadcast_activity', 'comment'); }" data-utm="?utm_source=tm_megamozg&utm_medium=tm_block&utm_campaign=tm_promo">Альтруизм, эгоизм, инстаграм. Взгляд физиолога на поведение в социальных сетях</a>&nbsp;&nbsp;<a href="https://geektimes.ru/post/278592/#comments" class="content-list__item-counter icon_comments">48</a>
+          </li>
+      </ul>
+    </div>
+  </div>
+
+    </div>
+
+    <div class="sidebar_right">
+        <div class="xyz_wrapper js-ad_sticky_bottom">
+  <div class="xyz_wrapper_inner">
+    <span class="xyz_wrapper_text">Реклама помогает поддерживать и&nbsp;развивать наши сервисы<br/><br/><a href="/adblock/" class="xyz_wrapper_button" target="_blank">Подробнее</a></span>
+
+    <!-- Яндекс.Директ -->
+    <div id="yandex_ad_bottom" style="background: #fff;"></div>
+    <script type="text/javascript">
+    (function(w, d, n, s, t) {
+        w[n] = w[n] || [];
+        w[n].push(function() {
+            Ya.Direct.insertInto(149298, "yandex_ad_bottom", {
+                ad_format: "direct",
+                font_family: "verdana",
+                type: "posterVertical",
+                border_type: "block",
+                limit: 1,
+                title_font_size: 3,
+                border_radius: true,
+                links_underline: false,
+                site_bg_color: "FFFFFF",
+                border_color: "FBE5C0",
+                title_color: "0066CC",
+                url_color: "006600",
+                text_color: "000000",
+                hover_color: "0066FF",
+                sitelinks_color: "0066CC",
+                favicon: true,
+                no_sitelinks: false
+            });
+        });
+        t = d.getElementsByTagName("script")[0];
+        s = d.createElement("script");
+        s.src = "//an.yandex.ru/system/context.js";
+        s.type = "text/javascript";
+        s.async = true;
+        t.parentNode.insertBefore(s, t);
+    })(window, document, "yandex_context_callbacks");
+    </script>
+
+  </div>
+  <a href="https://special.habrahabr.ru/advertising/" class="firskill__label">Реклама</a>
+</div>
+    </div>
+  </div>
+
+  <script>
+    window._yaparams = {'hubs':[]};
+    // hubs to GA
+      _yaparams['hubs'].push('openstreetmap (OpenStreetMap)');
+  </script>
+
+
+          <div class="clear"></div>
+
+          <div class="footer_panel">
+            <div id="footer">
+  <dl>
+    <dd><a href="https://habrahabr.ru/auth/login/">Войти</a></dd>
+    <dd><a href="https://habrahabr.ru/auth/register/">Регистрация</a></dd>
+  </dl>
+  <dl>
+    <dt>Разделы</dt>
+    <dd><a href="https://habrahabr.ru/posts/top/">Публикации</a></dd>
+    <dd><a href="https://habrahabr.ru/hubs/">Хабы</a></dd>
+    <dd><a href="https://habrahabr.ru/companies/">Компании</a></dd>
+    <dd><a href="https://habrahabr.ru/users/">Пользователи</a></dd>
+    <dd><a href="https://toster.ru/?_aa=press_anykey">Q&amp;A</a></dd>
+    <dd><a href="https://habrahabr.ru/sandbox/">Песочница</a></dd>
+
+  </dl>
+  <dl>
+    <dt>Инфо</dt>
+    <dd><a href="/info/about/">О сайте</a></dd>
+    <dd><a href="/info/help/rules/">Правила</a></dd>
+    <dd><a href="/info/help/">Помощь</a></dd>
+    <dd><a href="/info/agreement/">Соглашение</a></dd>
+  </dl>
+  <dl>
+    <dt>Услуги</dt>
+    <dd><a href="https://special.habrahabr.ru/advertising/">Реклама</a></dd>
+      <dd><a href="https://special.habrahabr.ru/">Спецпроекты</a></dd>
+      <dd><a href="https://special.habrahabr.ru/corporate/">Тарифы</a></dd>
+      <dd><a href="https://special.habrahabr.ru/content/">Контент</a></dd>
+      <dd><a href="https://special.habrahabr.ru/workshops/">Вебинары</a></dd>
+  </dl>
+
+  <dl>
+    <dt>Разное</dt>
+    <dd><a href="/apps/">Приложения</a></dd>
+    <dd><a href="https://special.habrahabr.ru/google/lab/" target="_blank">Тест-драйв</a></dd>
+    <dd><a href="https://special.habrahabr.ru/hello_startup/habrahabr/" target="_blank">Помощь стартапам</a></dd>
+      <dd><a href="https://special.habrahabr.ru/#hr">Работа в IT</a></dd>
+  </dl>
+  <div class="copyright">
+
+    <div class="about">
+      <a href="https://tmtm.ru/">© TM</a>
+
+      <br><br>
+      <a href="https://habrahabr.ru/feedback/">Служба поддержки</a><br><br>
+          <a href="https://m.habrahabr.ru/post/270513/?mobile=yes">Мобильная версия</a><br><br>
+
+
+      <div class="social_accounts">
+        <a href="https://twitter.com/habrahabr" class="tw"></a>
+        <a href="https://www.facebook.com/habrahabr.ru" class="fb"></a>
+        <a href="https://vk.com/habr" class="vk"></a>
+        <!-- <a href="" class="gp"></a> //-->
+      </div>
+
+    </div>
+  </div>
+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+      <script type="text/javascript" src="//habracdn.net/habr/javascripts/1468852450/libs/jquery.cookie.js"></script>
+      <script type="text/javascript">
+        $(document).ready( function(){
+          window.tmidLogin = function(){ return false; };
+
+          if( $.cookie('tmid_no_check') == undefined ) {
+            var expire = new Date();
+            expire.setMinutes(expire.getMinutes() + 10 );
+            $.cookie('tmid_no_check', 1, { expires: expire } );
+            $.getScript("https://id.tmtm.ru/checklogin/", function(){
+              if( window.tmidLogin() ) {
+
+                  var href = $('#login').attr('href')+'?checklogin=true';
+
+                  if( href !== undefined ) {
+                      window.location.href = href;
+                  }
+              }
+            });
+          }
+        });
+      </script>
+
+    <script type="text/javascript">
+  // global vars
+  var g_base_url = 'habrahabr.ru';
+  var g_show_xpanel = false;
+  var g_base_fullurl = 'https://habrahabr.ru/';
+  var g_is_guest = false;
+</script> 
+
+      <script type="text/javascript" src="//habracdn.net/habr/javascripts/1468852450/assets/shortcuts.js"></script>
+
+    <script type="text/javascript" src="//habracdn.net/habr/javascripts/1468852450/assets/global_footer_main.js"></script>
+
+    	<script type="text/javascript" src="https://habrahabr.ru/viewcount/post/270513/"></script>
+
+    
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            if (typeof (_yaparams) != 'undefined') {
+                w.yaCounter24049213 = new Ya.Metrika({id:24049213,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    params:_yaparams});
+            } else {
+                w.yaCounter24049213 = new Ya.Metrika({id:24049213,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+            }
+
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/24049213" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+    
+
+    
+
+    <!-- Хабр не резиновый! -->
+  </body>
+</html>

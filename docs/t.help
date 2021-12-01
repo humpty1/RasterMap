@@ -1,0 +1,26 @@
+test unit to work with raster map (ver:0.21.0.0)
+usage:
+ a [-?] [-db stringConection] [-ltt B] [-lng L] [-z ZZZ] [-cou NNN] [-c] [-s] [-crt] [-cache NNN] [-ts] [-dp P] [-l LNG] [-v] [-log NNN]  -osm | -vi | -ya  [-f fileName  { -dixi | -ASC | -mini } ]
+options:
+  -?          		: help info: True
+  -f fileName		: file with way point: .noSuchFile.csv
+  -dixi          		: the www.DigSee.com file format: False
+  -ASC          		: the AeroSpaceCenter file format: False
+  -mini          		: just  latitude + longitude  format: False
+  -db stringConection		: set the connection string to database: Data Source=MBTiles.db
+  -osm          		: to download tiles from openstreem.org: False
+  -vi          		: to download tiles from visicom.ua: False
+  -ya          		: to download tiles from yandex.ru: False
+  -ltt B		: degrees of latitude (0..80): 50.44107
+  -lng L		: degrees of longitude (0..180): 30.43139
+  -z ZZZ		: zoom level for map (2..19): 10
+  -cou NNN		: the number of tiles of map (3x3): 3
+  -c          		: clear database: False
+  -s          		: to select list of all the tiles: False
+  -crt          		: create new database: False
+  -cache NNN		: count(KB) of max size db to cache tile: 3608
+  -ts          		: seconds between two coordinates: 10
+  -dp P		: decimal point: ,
+  -l LNG		: language of application (0-en,1-ru,2-ua) (0..2): 0
+  -v          		: additional info: False
+  -log NNN		: log level names:{Spam Debug Warning Stats Error FatalError Info Ignore}: Error

@@ -1,0 +1,123 @@
+digraph world {
+s[shape=plaintext, label=" architecture of data flow \n of interactive system "]
+
+s -> machineSet[color=white];
+s -> os[color=white];
+s -> osC[color=white];                
+s -> u1[color=white];
+
+   machineSet ->  machine[color=white];
+   machine    ->  state[color=white];
+   state      ->  relation[color=white] ;
+   relation   ->  tuple[color=white] ;
+//   tuple      ->  attribute [color=white];
+
+
+//machineSet -> os;
+
+u1      -> osC:os2;
+osC:os4 -> u1;
+
+osC[shape=record, label="{  {<os3>|osOut|<os4>} | {<os1>|osIn|<os2>}}"]
+
+os       -> osC:os3;
+osC:os1  -> os;
+
+
+
+os  -> app;
+app -> os;
+
+
+//machine -> app;
+
+app       -> appC: app3 ;
+appC:app1 -> app;
+
+appC[shape=record, label="{{<app1>|appIn|<app2>}|  {<app3>|appOut|<app4>}}"]
+u2        -> appC:app2;
+appC:app4 -> u2;
+
+
+app -> pan;
+pan -> app;
+
+
+pan        -> panC: pan3;
+panC: pan1 -> pan;
+u3         -> panC: pan2;
+panC: pan4 -> u3;
+panC [shape=record, label="{{<pan1>|panIn|<pan2>}|  {<pan3>|panOut|<pan4>}}"]
+
+
+pan -> set;
+set -> pan;
+
+//relation  -> set;
+set         -> setC:set3;
+setC: set1  -> set;
+u4          -> setC:set2;
+setC:set4   ->  u4;
+setC[shape=record, label="{{<set1>|setIn|<set2>}|  {<set3>|setOut|<set4>}}"]
+
+
+ set  -> item;
+ item -> set;
+
+ //tuple -> item;
+ item -> itC:it3 ;
+ itC:it1 -> item;
+  itC:it4 -> u5;
+   u5 -> itC:it2;
+
+
+ itC[shape=record, label="{{< it1>| itIn|< it2>}|  {< it3>| itOut|< it4>}}"]
+
+subgraph cluster0  {
+ label=System;
+ os; app[label=application]; pan[label=panel]; set[label="set visualization"]; item[label=field];  
+}
+
+
+subgraph cluster1  {
+  color=white;
+  osC-> appC [color=white];
+  appC-> panC[color=white];
+  panC-> setC[color=white];
+  setC-> itC[color=white] ;
+}
+
+subgraph cluster2  
+{
+label="abstration level";
+labelfontcolor=black;
+color=white;
+
+machineSet[shape=plaintext];
+machine   [shape=plaintext];   
+state     [shape=plaintext];     
+relation  [shape=plaintext, label=set];  
+tuple     [shape=plaintext, label=item];   
+//attribute [shape=plaintext];
+}
+
+subgraph cluster3  {
+//color=white;
+shape=ellipse;
+label=User;
+ u1 [label="",shape=plaintext]; 
+ u2 [label="",shape=plaintext]; 
+ u3 [label="",shape=plaintext]; 
+ u4 [label="",shape=plaintext]; 
+ u5 [label="",shape=plaintext]; 
+// u6 [label="",shape=plaintext];
+ u1 -> u2[color=white]                      ;
+ u2 -> u3[color=white]                  ;
+ u3 -> u4[color=white]            ;
+ u4 -> u5[color=white]      ;
+// u5 -> u6[color=white]  ;
+
+}
+
+
+}

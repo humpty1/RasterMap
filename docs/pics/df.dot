@@ -1,0 +1,78 @@
+
+digraph world {
+  rankdir=LR;
+  node[shape=box];
+
+{rank = same; log0; log1; log2; log3; log4  }
+
+  log0 -> LogParser[color=white];
+
+  log1 -> LogParser;
+  log2 -> LogParser;
+  log3 -> LogParser;
+  log4 -> LogParser;
+  log0[color=white, label="log files"];
+  log1[label="dss"];
+  log2[label="wms"];
+  log3[label="fhpd"];
+  log4[label="wmst"];
+
+  //subgraph "log" {label="log files"; log1; log2; log3; log4;}
+
+
+{rank = same; LogParser; MntSvc }
+
+  LogParser[shape=ellipse];
+  MntSvc[color=black, label="./bin/WSMntSvc.ini"];
+
+{rank = same; csv0; csv1; csv2; csv3; csv4  }
+
+  csv0[shape=ellipse, label="./bin/WSMntSvc.exe"];
+  csv1[shape=ellipse, label="./run/ex_mkLoad.cmd"];
+  csv2[label="csv file (./run/.LPLoad.csv)"];
+  csv3[color=white,label=""];
+  csv4[color=white,label=""];
+
+
+  LogParser -> csv1[dir=back];
+  LogParser -> csv0[color=white];
+  LogParser -> csv2;
+  LogParser -> csv3[color=white];
+  LogParser -> csv4[color=white];
+{rank = same; olog0; olog1; isql  }
+  olog0[label="./bin/UDAStat.log"];
+  olog1[label="./run/.mkLoad.20YY-MM.log"];
+  csv0  -> olog0;
+  csv1 -> olog1;
+
+  isql[shape=ellipse];
+  csv1 -> isql;
+  csv2 -> isql;
+  log0   -> MntSvc[color=white];
+{rank = same; db; adminTool}
+  db[shape=record, label ="<in> ar.udua table|  {ar.trf_mk | db.udua} |{<out> ar.trf_sp | <out2> ...}"]
+  isql -> db:in;
+  db:out   -> adminTool;
+  db:out2   -> adminTool;
+  olog0 -> olog1[color=white];     
+  olog1 -> isql[color=white];      
+
+  
+  csv0 -> csv1;
+  csv0 -> isql[color=white];
+  csv3 -> isql[color=white];
+  csv4 -> isql[color=white];
+
+
+  adminTool -> reports;
+  {rank = same; reports}
+
+
+  log0   -> MntSvc[color=white];
+  MntSvc -> csv0;
+  MntSvc -> LogParser[color=white];
+  //MntSvc -> isql;
+  adminTool [shape=ellipse];
+  subgraph "log" {label="log files"; log1; log2; log3; log4;}
+  //subgraph "csv" {label="csv files", csv1; csv2; csv3; csv4}
+}
